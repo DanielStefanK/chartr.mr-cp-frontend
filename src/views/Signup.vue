@@ -93,9 +93,8 @@ export default {
           this.$router.push({ name: 'dashboard' });
         })
         .catch(error => {
-          console.log(error);
           EventBus.$emit('snackbar', {
-            text: 'E-Mail already exists',
+            text: error.message,
             color: 'error',
           });
         });

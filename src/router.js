@@ -108,15 +108,9 @@ router.beforeEach(async (to, from, next) => {
       user = data.me;
     }
 
-    console.log(to);
-    console.log(user);
-
     const faultyPerimeter = to.meta.perimeter.find(
       perimeter => !perimeter.check(user),
     );
-    console.log(to.meta.perimeter);
-
-    console.log(faultyPerimeter);
 
     if (faultyPerimeter) {
       next({ name: faultyPerimeter.redirect });

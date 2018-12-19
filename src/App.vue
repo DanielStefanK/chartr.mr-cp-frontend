@@ -25,13 +25,14 @@ export default {
   },
 
   watch: {
-    $route(to) {
+    $route(to, from) {
       switch (to.name) {
         case 'signup':
           this.transitionName = 'slide-left';
           break;
         case 'login':
-          this.transitionName = 'slide-right';
+          if (from.name === 'signup') this.transitionName = 'slide-right';
+          else this.transitionName = 'fade';
           break;
         default:
           this.transitionName = 'fade';

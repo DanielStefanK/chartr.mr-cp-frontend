@@ -102,9 +102,8 @@ export default {
           this.$router.push({ name: 'dashboard' });
         })
         .catch(error => {
-          console.log(error);
           EventBus.$emit('snackbar', {
-            text: 'Wrong password/username',
+            text: error.message,
             color: 'error',
           });
         });
