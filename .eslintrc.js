@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  plugins: ['graphql'],
   env: {
     node: true,
   },

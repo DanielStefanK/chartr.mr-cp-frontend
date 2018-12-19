@@ -1,26 +1,130 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+import ControlPanel from './views/ControlPanel.vue';
+import provider from './plugins/vue-apollo';
+import gql from 'graphql-tag';
 
 Vue.use(Router);
 
-export default new Router({
+const routePerimeter = {
+  LOGGEDIN: {
+    check(user) {
+      return !!user;
+    },
+    redirect: 'login',
+  },
+
+  HASCOMPANY: {
+    check(user) {
+      return user.company;
+    },
+    redirect: 'dashboard',
+  },
+
+  NOTLOGGEDIN: {
+    check(user) {
+      return !user;
+    },
+    redirect: 'dashboard',
+  },
+
+  HASNOCOMPANY: {
+    check(user) {
+      return !!user.company;
+    },
+    redirect: 'dashboard',
+  },
+};
+
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      component: ControlPanel,
+      children: [
+        {
+          path: '',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN],
+          },
+          name: 'dashboard',
+          component: () =>
+            import(/* webpackChunkName: "dashboard" */ './views/ControlPanel/Dashboard.vue'),
+        },
+      ],
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/login',
+      name: 'login',
+      meta: {
+        perimeter: [routePerimeter.NOTLOGGEDIN],
+      },
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ './views/About.vue'),
+        import(/* webpackChunkName: "login" */ './views/Login.vue'),
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      meta: {
+        perimeter: [routePerimeter.NOTLOGGEDIN],
+      },
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () =>
+        import(/* webpackChunkName: "signup" */ './views/Signup.vue'),
     },
   ],
 });
+
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.perimeter) {
+    const { data } = await provider.defaultClient.query({
+      fetchPolicy: 'cache-first',
+      errorPolicy: 'ignore',
+      query: gql`
+        query me {
+          me {
+            id
+            permissions
+            company {
+              id
+            }
+          }
+        }
+      `,
+    });
+
+    let user;
+
+    if (!data) {
+      user = null;
+    } else {
+      user = data.me;
+    }
+
+    console.log(to);
+    console.log(user);
+
+    const faultyPerimeter = to.meta.perimeter.find(
+      perimeter => !perimeter.check(user),
+    );
+    console.log(to.meta.perimeter);
+
+    console.log(faultyPerimeter);
+
+    if (faultyPerimeter) {
+      next({ name: faultyPerimeter.redirect });
+      return;
+    }
+  }
+
+  next();
+});
+
+export default router;
