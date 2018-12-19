@@ -93,6 +93,7 @@ export default {
           this.$router.push({ name: 'dashboard' });
         })
         .catch(error => {
+          // TODO: better error handling
           EventBus.$emit('snackbar', {
             text: error.message,
             color: 'error',

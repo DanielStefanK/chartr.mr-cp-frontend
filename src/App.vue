@@ -1,11 +1,9 @@
 <template>
   <v-app dark>
-    <v-content>
-      <transition mode="out-in" :name="transitionName">
-        <router-view></router-view>
-      </transition>
-      <v-snackbar v-model="snackbar" :timeout="5000" :color="snackbarColor">{{ snackbarText }}</v-snackbar>
-    </v-content>
+    <transition mode="out-in" :name="transitionName">
+      <router-view></router-view>
+    </transition>
+    <v-snackbar v-model="snackbar" :timeout="5000" :color="snackbarColor">{{ snackbarText }}</v-snackbar>
   </v-app>
 </template>
 

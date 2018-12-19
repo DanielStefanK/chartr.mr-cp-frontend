@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" fixed app>
+    <v-navigation-drawer v-model="drawer" fixed app v-if="showDrawer">
       <v-list dense>
         <v-list-tile>
           <v-list-tile-action>
@@ -13,7 +13,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon v-if="showDrawer" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Charter</v-toolbar-title>
       <v-spacer/>
       <v-tooltip bottom>
@@ -41,6 +41,12 @@ export default {
   data: () => ({
     drawer: null,
   }),
+
+  computed: {
+    showDrawer() {
+      return !this.$route.meta.hideDrawer;
+    },
+  },
 
   methods: {
     async logout() {

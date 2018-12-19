@@ -18,7 +18,7 @@ const routePerimeter = {
     check(user) {
       return user.company;
     },
-    redirect: 'dashboard',
+    redirect: 'createcompany',
   },
 
   NOTLOGGEDIN: {
@@ -30,7 +30,7 @@ const routePerimeter = {
 
   HASNOCOMPANY: {
     check(user) {
-      return !!user.company;
+      return !user.company;
     },
     redirect: 'dashboard',
   },
@@ -47,11 +47,24 @@ const router = new Router({
         {
           path: '',
           meta: {
-            perimeter: [routePerimeter.LOGGEDIN],
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
           },
           name: 'dashboard',
           component: () =>
             import(/* webpackChunkName: "dashboard" */ './views/ControlPanel/Dashboard.vue'),
+        },
+        {
+          path: 'createcompany',
+          name: 'createcompany',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASNOCOMPANY],
+            hideDrawer: true,
+          },
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () =>
+            import(/* webpackChunkName: "createcompany" */ './views/ControlPanel/CreateCompany.vue'),
         },
       ],
     },
