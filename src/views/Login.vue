@@ -6,9 +6,10 @@
           <v-toolbar dark color="primary">
             <v-toolbar-title>Login</v-toolbar-title>
           </v-toolbar>
-          <form @submit.prevent="login">
+          <form @submit.prevent="login" :disabled="isLoading">
             <v-card-text>
               <v-text-field
+                :disabled="isLoading"
                 v-model="email"
                 prepend-icon="alternate_email"
                 name="email"
@@ -16,6 +17,7 @@
                 type="email"
               ></v-text-field>
               <v-text-field
+                :disabled="isLoading"
                 v-model="password"
                 id="password"
                 prepend-icon="lock"
@@ -27,7 +29,7 @@
             <v-card-actions>New to chartr? Sign up&nbsp;
               <router-link to="signup">here</router-link>
               <v-spacer></v-spacer>
-              <v-btn color="primary" type="submit">Login</v-btn>
+              <v-btn color="primary" :loading="isLoading" type="submit">Login</v-btn>
             </v-card-actions>
           </form>
         </v-card>
@@ -48,11 +50,14 @@ export default {
     return {
       email: '',
       password: '',
+      isLoading: false,
     };
   },
 
   methods: {
     login() {
+      //todo validate
+      this.isLoading = true;
       this.$apollo
         .mutate({
           mutation: gql`
@@ -107,6 +112,9 @@ export default {
             text: error.message,
             color: 'error',
           });
+        })
+        .then(() => {
+          this.isLoading = false;
         });
     },
   },

@@ -24,8 +24,9 @@
         <v-divider></v-divider>
 
         <v-card-actions>
+          <span v-if="error" class="red--text">A user with this email already exists</span>
           <v-spacer></v-spacer>
-          <v-btn color="primary" flat type="submit">add</v-btn>
+          <v-btn color="primary" :loading="isLoading" flat type="submit">add</v-btn>
         </v-card-actions>
       </form>
     </v-card>
@@ -33,18 +34,61 @@
 </template>
 
 <script>
+import gql from 'graphql-tag';
+
 export default {
+  props: {
+    users: {
+      type: Array,
+      required: false,
+    },
+  },
+
   data() {
     return {
       dialog: false,
       name: '',
       email: '',
       password: '',
+      isLoading: false,
+      error: false,
     };
   },
 
   methods: {
-    add() {
+    async add() {
+      //todo validate user input
+      this.isLoading = true;
+      this.error = false;
+
+      const user = this.users.find(user => {
+        return user.email === this.email;
+      });
+
+      if (user) {
+        this.error = true;
+        this.isLoading = false;
+        return;
+      }
+
+      const result = await this.$apollo.query({
+        query: gql`
+          query checkUser($email: String!) {
+            checkUser(email: $email)
+          }
+        `,
+
+        variables: {
+          email: this.email,
+        },
+      });
+
+      if (result.data.checkUser) {
+        this.error = true;
+        this.isLoading = false;
+        return;
+      }
+
       this.$emit('add', {
         name: this.name,
         password: this.password,
@@ -55,6 +99,8 @@ export default {
       this.email = '';
       this.password = '';
       this.dialog = false;
+      this.error = false;
+      this.isLoading = false;
     },
   },
 };

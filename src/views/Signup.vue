@@ -9,6 +9,7 @@
           <form @submit.prevent="signup">
             <v-card-text>
               <v-text-field
+                :disabled="isLoading"
                 v-model="name"
                 prepend-icon="person"
                 name="name"
@@ -16,6 +17,7 @@
                 type="text"
               ></v-text-field>
               <v-text-field
+                :disabled="isLoading"
                 v-model="email"
                 prepend-icon="alternate_email"
                 name="email"
@@ -23,6 +25,7 @@
                 type="email"
               ></v-text-field>
               <v-text-field
+                :disabled="isLoading"
                 v-model="password"
                 id="password"
                 prepend-icon="lock"
@@ -34,7 +37,7 @@
             <v-card-actions>Already a chartr? Login &nbsp;
               <router-link to="login">here</router-link>
               <v-spacer></v-spacer>
-              <v-btn color="primary" type="submit">Register</v-btn>
+              <v-btn color="primary" :loading="isLoading" type="submit">Register</v-btn>
             </v-card-actions>
           </form>
         </v-card>
@@ -56,11 +59,14 @@ export default {
       email: '',
       password: '',
       name: '',
+      isLoading: false,
     };
   },
 
   methods: {
     signup() {
+      //todo validata data
+      this.isLoading = true;
       this.$apollo
         .mutate({
           mutation: gql`
@@ -98,6 +104,9 @@ export default {
             text: error.message,
             color: 'error',
           });
+        })
+        .then(() => {
+          this.isLoading = false;
         });
     },
   },

@@ -10,6 +10,11 @@
           <v-list-tile-title v-html="user.name"></v-list-tile-title>
           <v-list-tile-sub-title v-html="user.email"></v-list-tile-sub-title>
         </v-list-tile-content>
+        <v-list-tile-action>
+          <v-btn icon ripple>
+            <v-icon color="error lighten-1">delete</v-icon>
+          </v-btn>
+        </v-list-tile-action>
       </v-list-tile>
     </template>
   </v-list>

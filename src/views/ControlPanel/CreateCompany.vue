@@ -24,7 +24,7 @@
                 </v-flex>
                 <v-flex xs12>
                   <user-list :users="users"/>
-                  <user-add-dialog @add="addUser"/>
+                  <user-add-dialog :users="users" @add="addUser"/>
                 </v-flex>
               </v-layout>
             </v-card-text>

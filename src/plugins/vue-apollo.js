@@ -12,8 +12,7 @@ Vue.use(VueApollo);
 const AUTH_TOKEN = 'apollo-token';
 
 // Http endpoint
-const httpEndpoint =
-  process.env.VUE_APP_GRAPHQL_HTTP || 'http://localhost:4000/';
+const httpEndpoint = process.env.BACKENURL || 'http://localhost:4000/';
 // Files URL root
 export const filesRoot =
   process.env.VUE_APP_FILES_ROOT ||
@@ -25,7 +24,7 @@ Vue.prototype.$filesRoot = filesRoot;
 const defaultOptions = {
   httpEndpoint,
 
-  wsEndpoint: process.env.VUE_APP_GRAPHQL_WS || 'ws://localhost:4000/',
+  wsEndpoint: process.env.BACKENURL || 'ws://localhost:4000/',
 
   tokenName: AUTH_TOKEN,
 
