@@ -5,6 +5,10 @@ import router from './router';
 import store from './store';
 import provider from './plugins/vue-apollo';
 
+import Vuelidate from 'vuelidate';
+
+Vue.use(Vuelidate);
+
 Vue.config.productionTip = false;
 
 new Vue({
