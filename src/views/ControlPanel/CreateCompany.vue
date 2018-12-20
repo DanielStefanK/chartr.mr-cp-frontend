@@ -17,14 +17,34 @@
                 <v-flex xs12>
                   <v-text-field
                     v-model="name"
+                    :error-messages="validationErrors('name',
+                    {
+                      required: 'Please enter an Name',
+                      minLength: 'Name too short',
+                      maxLength: 'Name too long',
+                    })"
                     prepend-icon="business"
                     label="Company Name"
                     type="text"
+                    @blur="$v.name.$touch()"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <user-list :users="users"/>
-                  <user-add-dialog :users="users" @add="addUser"/>
+                  <ApolloQuery :query="require('@/graphql/MeQuery.gql')" :variables="{ name }">
+                    <template slot-scope="{ result: { data, loading } }">
+                      <div v-if="loading">
+                        <v-progress-linear indeterminate></v-progress-linear>
+                      </div>
+                      <div v-else>
+                        <user-list
+                          :me="data ? data.me : null"
+                          :users="users"
+                          @removeUser="removeUser"
+                        />
+                        <user-add-dialog :users="users" @add="addUser"/>
+                      </div>
+                    </template>
+                  </ApolloQuery>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -40,6 +60,10 @@
 </template>
 
 <script>
+import { required, minLength, maxLength } from 'vuelidate/lib/validators';
+
+import validationMixins from '@/mixins/validationHelper';
+
 import UserAddDialog from '@/components/UserAddDialog.vue';
 import UserList from '@/components/UserList.vue';
 
@@ -51,12 +75,27 @@ export default {
     };
   },
 
+  mixins: [validationMixins],
+
+  validations: {
+    name: {
+      required,
+      minLength: minLength(2),
+      maxLength: maxLength(30),
+    },
+  },
+
   methods: {
     submit() {
       alert('yay');
     },
     addUser(user) {
       this.users.push(user);
+    },
+    removeUser(email) {
+      const index = this.users.findIndex(usr => usr.email === email);
+
+      this.users.splice(index, 1);
     },
   },
 

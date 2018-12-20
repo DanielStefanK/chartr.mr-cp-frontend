@@ -35,6 +35,10 @@
 
 <script>
 import gql from 'graphql-tag';
+import { required, email } from 'vuelidate/lib/validators';
+
+import { EventBus } from '../utils/eventBus';
+import validationMixins from '@/mixins/validationHelper';
 
 export default {
   props: {
@@ -53,6 +57,18 @@ export default {
       isLoading: false,
       error: false,
     };
+  },
+
+  mixins: [validationMixins],
+
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+    },
   },
 
   methods: {
@@ -86,6 +102,10 @@ export default {
       if (result.data.checkUser) {
         this.error = true;
         this.isLoading = false;
+        EventBus.$emit('snackbar', {
+          text: 'A user with that name already exists',
+          color: 'error',
+        });
         return;
       }
 
@@ -101,6 +121,10 @@ export default {
       this.dialog = false;
       this.error = false;
       this.isLoading = false;
+      EventBus.$emit('snackbar', {
+        text: 'The user was added',
+        color: 'success',
+      });
     },
   },
 };

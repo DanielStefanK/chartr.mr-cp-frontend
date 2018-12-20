@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import ControlPanel from './views/ControlPanel.vue';
 import provider from './plugins/vue-apollo';
-import gql from 'graphql-tag';
 
 Vue.use(Router);
 
@@ -100,17 +99,7 @@ router.beforeEach(async (to, from, next) => {
     const { data } = await provider.defaultClient.query({
       fetchPolicy: 'cache-first',
       errorPolicy: 'ignore',
-      query: gql`
-        query me {
-          me {
-            id
-            permissions
-            company {
-              id
-            }
-          }
-        }
-      `,
+      query: require('@/graphql/MeQuery.gql'),
     });
 
     let user;
