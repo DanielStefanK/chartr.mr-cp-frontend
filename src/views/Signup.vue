@@ -110,7 +110,7 @@ export default {
       required,
       minLength: minLength(2),
       alphaNum,
-      maxLength: maxLength(20),
+      maxLength: maxLength(30),
     },
   },
 

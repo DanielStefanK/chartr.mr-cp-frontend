@@ -10,6 +10,11 @@
             <v-card-text>
               <v-text-field
                 :disabled="isLoading"
+                :error-messages="validationErrors('email',
+                  {
+                    required: 'Please enter an email',
+                    email: 'Please enter a valid email',
+                  })"
                 v-model="email"
                 prepend-icon="alternate_email"
                 name="email"
@@ -18,6 +23,10 @@
               ></v-text-field>
               <v-text-field
                 :disabled="isLoading"
+                :error-messages="validationErrors('password',
+                  {
+                    required: 'Please enter a password',
+                  })"
                 v-model="password"
                 id="password"
                 prepend-icon="lock"
@@ -40,10 +49,12 @@
 
 <script>
 import gql from 'graphql-tag';
+import { required, email } from 'vuelidate/lib/validators';
 
 import { onLogin } from '../plugins/vue-apollo.js';
 
 import { EventBus } from '../utils/eventBus';
+import validationMixins from '@/mixins/validationHelper';
 
 export default {
   data() {
@@ -54,68 +65,86 @@ export default {
     };
   },
 
+  mixins: [validationMixins],
+
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+    },
+  },
+
   methods: {
     login() {
-      //todo validate
-      this.isLoading = true;
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation login($email: String!, $password: String!) {
-              login(email: $email, password: $password) {
-                token
-                me {
-                  name
-                  id
-                  permissions
-                  company {
+      if (!this.$v.$invalid) {
+        this.isLoading = true;
+        this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation login($email: String!, $password: String!) {
+                login(email: $email, password: $password) {
+                  token
+                  me {
+                    name
                     id
-                  }
-                }
-              }
-            }
-          `,
-
-          variables: {
-            email: this.email,
-            password: this.password,
-          },
-        })
-        .then(async ({ data }) => {
-          await onLogin(this.$apollo.provider.defaultClient, data.login.token);
-          EventBus.$emit('snackbar', {
-            text: 'Successfully logged in',
-            color: 'success',
-          });
-          this.$apollo.provider.defaultClient.writeQuery({
-            query: gql`
-              query me {
-                me {
-                  name
-                  id
-                  permissions
-                  company {
-                    id
+                    permissions
+                    company {
+                      id
+                    }
                   }
                 }
               }
             `,
-            data: {
-              me: data.login.me,
+
+            variables: {
+              email: this.email,
+              password: this.password,
             },
+          })
+          .then(async ({ data }) => {
+            await onLogin(
+              this.$apollo.provider.defaultClient,
+              data.login.token,
+            );
+            EventBus.$emit('snackbar', {
+              text: 'Successfully logged in',
+              color: 'success',
+            });
+            this.$apollo.provider.defaultClient.writeQuery({
+              query: gql`
+                query me {
+                  me {
+                    name
+                    id
+                    permissions
+                    company {
+                      id
+                    }
+                  }
+                }
+              `,
+              data: {
+                me: data.login.me,
+              },
+            });
+            this.$router.push({ name: 'dashboard' });
+          })
+          .catch(error => {
+            // TODO: better error handling
+            EventBus.$emit('snackbar', {
+              text: error.message,
+              color: 'error',
+            });
+          })
+          .then(() => {
+            this.isLoading = false;
           });
-          this.$router.push({ name: 'dashboard' });
-        })
-        .catch(error => {
-          // TODO: better error handling
-          EventBus.$emit('snackbar', {
-            text: error.message,
-            color: 'error',
-          });
-        })
-        .then(() => {
-          this.isLoading = false;
-        });
+      } else {
+        this.$v.$touch();
+      }
     },
   },
 };
