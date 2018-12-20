@@ -113,19 +113,8 @@ export default {
               text: 'Successfully logged in',
               color: 'success',
             });
-            this.$apollo.provider.defaultClient.writeQuery({
-              query: gql`
-                query me {
-                  me {
-                    name
-                    id
-                    permissions
-                    company {
-                      id
-                    }
-                  }
-                }
-              `,
+            await this.$apollo.provider.defaultClient.writeQuery({
+              query: require('@/graphql/MeQuery.gql'),
               data: {
                 me: data.login.me,
               },

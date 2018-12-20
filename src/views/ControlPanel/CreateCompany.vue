@@ -37,6 +37,7 @@
                       </div>
                       <div v-else>
                         <user-list
+                          removable
                           :me="data ? data.me : null"
                           :users="users"
                           @removeUser="removeUser"
@@ -62,6 +63,7 @@
 <script>
 import { required, minLength, maxLength } from 'vuelidate/lib/validators';
 
+import { EventBus } from '@/utils/eventBus';
 import validationMixins from '@/mixins/validationHelper';
 
 import UserAddDialog from '@/components/UserAddDialog.vue';
@@ -72,6 +74,7 @@ export default {
     return {
       name: '',
       users: [],
+      isLoading: false,
     };
   },
 
@@ -86,9 +89,6 @@ export default {
   },
 
   methods: {
-    submit() {
-      alert('yay');
-    },
     addUser(user) {
       this.users.push(user);
     },
@@ -96,6 +96,46 @@ export default {
       const index = this.users.findIndex(usr => usr.email === email);
 
       this.users.splice(index, 1);
+    },
+    submit() {
+      if (!this.$v.$invalid) {
+        this.isLoading = true;
+
+        this.$apollo
+          .mutate({
+            mutation: require('@/graphql/createOwnCompanyMutation.gql'),
+
+            variables: {
+              name: this.name,
+              employees: this.users,
+            },
+          })
+          .then(async ({ data }) => {
+            EventBus.$emit('snackbar', {
+              text: 'Successfully created Company!',
+              color: 'success',
+            });
+            await this.$apollo.provider.defaultClient.writeQuery({
+              query: require('@/graphql/MeQuery.gql'),
+              data: {
+                me: data.createOwnCompany.contact,
+              },
+            });
+          })
+          .catch(error => {
+            // TODO: better error handling
+            EventBus.$emit('snackbar', {
+              text: error.message,
+              color: 'error',
+            });
+          })
+          .then(() => {
+            this.isLoading = false;
+            this.$router.push({ name: 'dashboard' });
+          });
+      } else {
+        this.$v.$touch();
+      }
     },
   },
 

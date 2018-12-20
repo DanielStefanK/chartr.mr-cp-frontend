@@ -22,7 +22,7 @@
             <v-list-tile-title v-html="user.name"></v-list-tile-title>
             <v-list-tile-sub-title v-html="user.email"></v-list-tile-sub-title>
           </v-list-tile-content>
-          <v-list-tile-action>
+          <v-list-tile-action v-if="removeable">
             <v-btn icon ripple @click="removeUser (user.email)">
               <v-icon color="error lighten-1">delete</v-icon>
             </v-btn>
@@ -38,6 +38,7 @@ export default {
   props: {
     users: { type: Array, required: true },
     me: { type: Object, required: false },
+    removeable: { type: Boolean, default: false },
   },
   methods: {
     removeUser(email) {

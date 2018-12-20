@@ -1,0 +1,17 @@
+mutation createOwnCompany(
+  $name: String!
+  $employees: [UserCreateWithoutCompanyInput!]!
+) {
+  createOwnCompany(name: $name, employees: $employees) {
+    id
+    contact {
+      id
+      name
+      email
+      permissions
+      company {
+        id
+      }
+    }
+  }
+}

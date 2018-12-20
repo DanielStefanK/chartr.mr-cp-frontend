@@ -47,10 +47,56 @@ const router = new Router({
           path: '',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            icon: 'home',
+            title: 'Dashboard',
           },
           name: 'dashboard',
           component: () =>
             import(/* webpackChunkName: "dashboard" */ './views/ControlPanel/Dashboard.vue'),
+        },
+        {
+          path: 'editemployees',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            icon: 'contacts',
+            title: 'Edit Employees',
+          },
+          name: 'editemployees',
+          component: () =>
+            import(/* webpackChunkName: "editemployees" */ './views/ControlPanel/EditEmployees.vue'),
+        },
+        {
+          path: 'editcompany',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            icon: 'business',
+            title: 'Edit Company',
+          },
+          name: 'editcompany',
+          component: () =>
+            import(/* webpackChunkName: "editcompany" */ './views/ControlPanel/EditCompany.vue'),
+        },
+        {
+          path: 'interview/list',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            icon: 'forum',
+            title: 'Interviews',
+          },
+          name: 'listinterviews',
+          component: () =>
+            import(/* webpackChunkName: "listinterviews" */ './views/ControlPanel/ListInterviews.vue'),
+        },
+        {
+          path: 'result/list',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            icon: 'face',
+            title: 'Results',
+          },
+          name: 'listresults',
+          component: () =>
+            import(/* webpackChunkName: "listresults" */ './views/ControlPanel/ListResults.vue'),
         },
         {
           path: 'createcompany',

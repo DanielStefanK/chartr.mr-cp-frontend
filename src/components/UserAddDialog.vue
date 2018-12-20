@@ -93,7 +93,7 @@ export default {
             checkUser(email: $email)
           }
         `,
-
+        fetchPolicy: 'network-only',
         variables: {
           email: this.email,
         },

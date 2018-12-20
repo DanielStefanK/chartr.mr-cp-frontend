@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :dark="dark">
     <transition mode="out-in" :name="transitionName">
       <router-view></router-view>
     </transition>
@@ -19,6 +19,7 @@ export default {
       snackbarText: '',
       snackbarColor: 'error',
       transitionName: 'fade',
+      dark: false,
     };
   },
 
@@ -43,6 +44,9 @@ export default {
       this.snackbarText = data.text;
       this.snackbarColor = data.color;
       this.snackbar = true;
+    });
+    EventBus.$on('darkMode', data => {
+      this.dark = data;
     });
   },
 };
