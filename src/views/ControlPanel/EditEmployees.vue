@@ -41,7 +41,7 @@
                     :users="employees"
                     @removeUser="onRemoveUser"
                   />
-                  and {{deletedEmployees.length}} deleted
+                  <template v-if="deletedEmployees.length>0">and {{deletedEmployees.length}} deleted</template>
                 </div>
               </v-flex>
             </v-layout>
