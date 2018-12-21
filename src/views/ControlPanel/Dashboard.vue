@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import CompanyCard from '@/components/CompanyCard';
-import EmployeesCard from '@/components/EmployeesCard';
-import RecentInterviewsCard from '@/components/RecentInterviewsCard';
-import RecentResultsCard from '@/components/RecentResultsCard';
+import CompanyCard from '@/components/Cards/CompanyCard';
+import EmployeesCard from '@/components/Cards/EmployeesCard';
+import RecentInterviewsCard from '@/components/Cards/RecentInterviewsCard';
+import RecentResultsCard from '@/components/Cards/RecentResultsCard';
 
 export default {
   components: {

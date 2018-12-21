@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import UserList from './UserList';
+import UserList from '../UserList';
 
 export default {
   data() {
