@@ -14,8 +14,7 @@
         //interview list
       </template>
       <template v-else>No interviews create one
-        <!--TODO: route to edit createInterview-->
-        <router-link :to="{name: 'dashboard'}">here</router-link>
+        <router-link :to="{name: 'listinterviews'}">here</router-link>
       </template>
     </v-card-text>
   </v-card>

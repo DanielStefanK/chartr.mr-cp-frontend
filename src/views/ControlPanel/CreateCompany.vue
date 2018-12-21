@@ -92,8 +92,8 @@ export default {
     addUser(user) {
       this.users.push(user);
     },
-    removeUser(email) {
-      const index = this.users.findIndex(usr => usr.email === email);
+    removeUser(user) {
+      const index = this.users.findIndex(usr => usr.email === user.email);
 
       this.users.splice(index, 1);
     },

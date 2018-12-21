@@ -5,10 +5,10 @@
         <v-card-title primary-title>
           <div v-if="$apollo.loading">Loading...</div>
           <div v-else>
-            <div class="headline">{{me.company.name}}</div>
-            <div>Contact: {{me.company.contact.name}} ({{me.company.contact.email}})</div>
-            <div>Employees: {{me.company.employees.length}}</div>
-            <div>Interviews: {{me.company.interviews.length}}</div>
+            <div class="headline">{{myCompany.name}}</div>
+            <div>Contact: {{myCompany.contact.name}} ({{myCompany.contact.email}})</div>
+            <div>Employees: {{myCompany.employees.length}}</div>
+            <div>Interviews: {{myCompany.interviews.length}}</div>
           </div>
         </v-card-title>
       </v-flex>
@@ -18,8 +18,7 @@
     </v-layout>
     <v-card-actions>
       <v-spacer/>
-      <v-btn icon>
-        <!--TODO: route to edit company-->
+      <v-btn icon @click="$router.push ({name: 'editcompany'})">
         <v-icon>edit</v-icon>
       </v-btn>
     </v-card-actions>
@@ -27,8 +26,6 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
-
 export default {
   data() {
     return {
@@ -37,28 +34,7 @@ export default {
   },
 
   apollo: {
-    me: gql`
-      query {
-        me {
-          id
-          company {
-            id
-            name
-            employees {
-              id
-            }
-            interviews {
-              id
-            }
-            contact {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
-    `,
+    myCompany: require('@/graphql/myCompanyQuery.gql'),
   },
 };
 </script>

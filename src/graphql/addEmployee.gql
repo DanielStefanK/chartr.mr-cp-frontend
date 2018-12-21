@@ -1,0 +1,8 @@
+mutation addEmployee($name: String!, $email: String!, $password: String!) {
+  addEmployee(name: $name, email: $email, password: $password) {
+    id
+    name
+    email
+    deleted
+  }
+}

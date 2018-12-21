@@ -1,6 +1,9 @@
 <template>
   <v-dialog v-model="dialog" width="500">
-    <div slot="activator">
+    <div slot="activator" v-if="this.$slots.default">
+      <slot></slot>
+    </div>
+    <div slot="activator" v-else>
       <v-btn flat icon>
         <v-icon>add</v-icon>
       </v-btn>Add a user to your company
@@ -76,15 +79,16 @@ export default {
       //todo validate user input
       this.isLoading = true;
       this.error = false;
+      if (this.users) {
+        const user = this.users.find(user => {
+          return user.email === this.email;
+        });
 
-      const user = this.users.find(user => {
-        return user.email === this.email;
-      });
-
-      if (user) {
-        this.error = true;
-        this.isLoading = false;
-        return;
+        if (user) {
+          this.error = true;
+          this.isLoading = false;
+          return;
+        }
       }
 
       const result = await this.$apollo.query({

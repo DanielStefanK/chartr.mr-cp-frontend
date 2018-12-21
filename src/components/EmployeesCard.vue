@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title primary-title>
       <div>
-        <div class="headline">Employees</div>
+        <div class="headline">Recent Employees</div>
       </div>
     </v-card-title>
     <v-card-text>
@@ -14,7 +14,7 @@
 
     <v-card-actions>
       <v-spacer/>
-      <v-btn icon>
+      <v-btn icon @click="$router.push ({name: 'editemployees'})">
         <!--TODO: route to edit employees-->
         <v-icon>edit</v-icon>
       </v-btn>
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
 import UserList from './UserList';
 
 export default {
@@ -35,29 +34,27 @@ export default {
 
   computed: {
     employees() {
-      if (!this.me) return [];
-      return this.me.company.employees.filter(user => user.id !== this.me.id);
+      if (!this.myEmployees || !this.me) return [];
+      return this.myEmployees.filter(
+        user => user.id !== this.me.id && !user.deleted,
+      );
     },
   },
 
   apollo: {
-    me: gql`
-      query {
-        me {
-          id
-          name
-          email
-          company {
-            id
-            employees {
-              id
-              name
-              email
-            }
-          }
-        }
-      }
-    `,
+    myEmployees: {
+      query: require('@/graphql/myEmployeesQuery.gql'),
+      variables: {
+        first: 5,
+        orderBy: 'createdAt_ASC',
+        where: {
+          deleted: false,
+        },
+      },
+    },
+    me: {
+      query: require('@/graphql/MeQuery.gql'),
+    },
   },
 
   components: {

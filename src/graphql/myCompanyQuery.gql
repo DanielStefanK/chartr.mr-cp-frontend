@@ -1,0 +1,20 @@
+query myCompany {
+  myCompany {
+    id
+    name
+    contact {
+      id
+      name
+      email
+    }
+    employees(where: { deleted: false }) {
+      id
+      name
+      email
+      deleted
+    }
+    interviews(where: { deleted: false }) {
+      id
+    }
+  }
+}

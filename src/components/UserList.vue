@@ -19,11 +19,14 @@
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title v-html="user.name"></v-list-tile-title>
+            <v-list-tile-title
+              :style=" {textDecoration: user.deleted ? 'line-through' : 'none'}"
+              v-html="user.name"
+            ></v-list-tile-title>
             <v-list-tile-sub-title v-html="user.email"></v-list-tile-sub-title>
           </v-list-tile-content>
-          <v-list-tile-action v-if="removeable">
-            <v-btn icon ripple @click="removeUser (user.email)">
+          <v-list-tile-action v-if="removeable && ! user.deleted">
+            <v-btn icon ripple @click="removeUser (user)">
               <v-icon color="error lighten-1">delete</v-icon>
             </v-btn>
           </v-list-tile-action>
@@ -41,8 +44,8 @@ export default {
     removeable: { type: Boolean, default: false },
   },
   methods: {
-    removeUser(email) {
-      this.$emit('removeUser', email);
+    removeUser(user) {
+      this.$emit('removeUser', user);
     },
   },
 };
