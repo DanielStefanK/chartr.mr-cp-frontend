@@ -137,6 +137,11 @@ const router = new Router({
       component: () =>
         import(/* webpackChunkName: "signup" */ './views/Signup.vue'),
     },
+    {
+      path: '*',
+      component: () =>
+        import(/* webpackChunkName: "notfound" */ './views/PageNotFound.vue'),
+    },
   ],
 });
 
