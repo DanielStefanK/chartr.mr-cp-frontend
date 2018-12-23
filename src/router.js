@@ -163,21 +163,21 @@ router.beforeEach(async (to, from, next) => {
     el => el.parentNode.removeChild(el),
   );
 
-  if (!nearestWithMeta) return next();
+  if (nearestWithMeta) {
+    nearestWithMeta.meta.metaTags
+      .map(tagDef => {
+        const tag = document.createElement('meta');
 
-  nearestWithMeta.meta.metaTags
-    .map(tagDef => {
-      const tag = document.createElement('meta');
+        Object.keys(tagDef).forEach(key => {
+          tag.setAttribute(key, tagDef[key]);
+        });
 
-      Object.keys(tagDef).forEach(key => {
-        tag.setAttribute(key, tagDef[key]);
-      });
+        tag.setAttribute('data-vue-router-controlled', '');
 
-      tag.setAttribute('data-vue-router-controlled', '');
-
-      return tag;
-    })
-    .forEach(tag => document.head.appendChild(tag));
+        return tag;
+      })
+      .forEach(tag => document.head.appendChild(tag));
+  }
 
   if (to.meta.perimeter) {
     const { data } = await provider.defaultClient.query({
