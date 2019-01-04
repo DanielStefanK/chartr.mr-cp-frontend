@@ -1,0 +1,11 @@
+query justCompany {
+  myCompany {
+    id
+    name
+    contact {
+      id
+      name
+      email
+    }
+  }
+}
