@@ -89,6 +89,7 @@ export default {
                   token
                   me {
                     name
+                    email
                     id
                     permissions
                     company {
