@@ -1,0 +1,11 @@
+mutation updateCompanyMutation($name: String!, $contact: ID!) {
+  updateOwnCompany(name: $name, contact: $contact) {
+    id
+    name
+    contact {
+      id
+      name
+      email
+    }
+  }
+}

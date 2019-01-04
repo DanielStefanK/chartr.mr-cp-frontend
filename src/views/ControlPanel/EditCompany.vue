@@ -75,11 +75,27 @@ export default {
       this.myCompany.contact = user;
     },
     updateCompany() {
-      // TODO: update in backend
-      EventBus.$emit('snackbar', {
-        text: 'Not implemented',
-        color: 'error',
-      });
+      this.$apollo
+        .mutate({
+          mutation: require('@/graphql/updateCompanyMutation.gql'),
+          variables: {
+            name: this.myCompany.name,
+            contact: this.myCompany.contact.id,
+          },
+          //TODO: update cache
+        })
+        .then(() => {
+          EventBus.$emit('snackbar', {
+            text: 'Company Updated',
+            color: 'success',
+          });
+        })
+        .catch(() => {
+          EventBus.$emit('snackbar', {
+            text: 'Could not update Company',
+            color: 'error',
+          });
+        });
     },
   },
 
