@@ -30,6 +30,11 @@
               <v-icon color="error lighten-1">delete</v-icon>
             </v-btn>
           </v-list-tile-action>
+          <v-list-tile-action v-else-if="selectable">
+            <v-btn icon ripple @click="removeUser (user)">
+              <v-icon>done</v-icon>
+            </v-btn>
+          </v-list-tile-action>
         </v-list-tile>
       </template>
     </transition-group>
@@ -42,6 +47,7 @@ export default {
     users: { type: Array, required: true },
     me: { type: Object, required: false },
     removeable: { type: Boolean, default: false },
+    selectable: { type: Boolean, default: false },
   },
   methods: {
     removeUser(user) {

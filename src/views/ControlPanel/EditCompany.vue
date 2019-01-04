@@ -25,11 +25,8 @@
                     <v-list-tile-title v-html="myCompany.contact.name"></v-list-tile-title>
                     <v-list-tile-sub-title v-html="myCompany.contact.email"></v-list-tile-sub-title>
                   </v-list-tile-content>
-                  <v-list-tile-action>
-                    <!-- TODO: add change dialog -->
-                    <v-btn icon ripple @click="changeContact (user)">
-                      <v-icon>edit</v-icon>
-                    </v-btn>
+                  <v-list-tile-action v-if="myEmployees">
+                    <select-user @selected="contactSelected" :users="myEmployees"/>
                   </v-list-tile-action>
                 </v-list-tile>
               </v-list>
@@ -47,6 +44,8 @@
 </template>
 
 <script>
+import SelectUser from '@/components/UserSelectDialog.vue';
+
 export default {
   data() {
     return {
@@ -58,10 +57,26 @@ export default {
     myCompany: {
       query: require('@/graphql/justCompanyQuery.gql'),
     },
+    myEmployees: {
+      query: require('@/graphql/myEmployeesQuery.gql'),
+      fetchPolicy: 'network-only',
+      variables: {
+        orderBy: 'createdAt_DESC',
+        where: {
+          deleted: false,
+        },
+      },
+    },
   },
 
   methods: {
-    changeContact() {},
+    contactSelected(user) {
+      this.myCompany.contact = user;
+    },
+  },
+
+  components: {
+    SelectUser,
   },
 };
 </script>
