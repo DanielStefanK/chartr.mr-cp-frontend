@@ -96,8 +96,6 @@ export default {
 
   methods: {
     addUser(mutate, user) {
-      console.log(user);
-
       mutate({ variables: { ...user } });
     },
     refetch() {
