@@ -7,6 +7,7 @@
             <v-layout justify-space-between>
               <div class="headline">Interviews</div>
               <!-- TODO: Add filter -->
+              <create-interview/>
             </v-layout>
           </v-card-title>
 
@@ -21,10 +22,12 @@
 
 <script>
 import InterviewList from '@/components/Lists/InterviewList.vue';
+import CreateInterview from '@/components/CreateInterview.vue';
 
 export default {
   components: {
     InterviewList,
+    CreateInterview,
   },
 };
 </script>
