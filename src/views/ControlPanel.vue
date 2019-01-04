@@ -103,6 +103,7 @@ export default {
   watch: {
     dark(newValue) {
       EventBus.$emit('darkMode', newValue);
+      localStorage.setItem('darkMode', newValue ? '1' : '0');
     },
   },
 
@@ -111,6 +112,9 @@ export default {
       await onLogout(this.$apollo.provider.defaultClient);
       this.$router.push({ name: 'login' });
     },
+  },
+  created() {
+    this.dark = localStorage.getItem('darkMode') === '1' ? true : false;
   },
 };
 </script>

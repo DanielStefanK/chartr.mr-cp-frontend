@@ -48,6 +48,7 @@ export default {
     EventBus.$on('darkMode', data => {
       this.dark = data;
     });
+    this.dark = localStorage.getItem('darkMode') === '1' ? true : false;
   },
 };
 </script>
