@@ -34,8 +34,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <!-- TODO: make it work -->
-            <v-btn color="primary">Submit</v-btn>
+            <v-btn color="primary" @click="updateCompany">Submit</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -44,6 +43,8 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/eventBus';
+
 import SelectUser from '@/components/UserSelectDialog.vue';
 
 export default {
@@ -72,6 +73,13 @@ export default {
   methods: {
     contactSelected(user) {
       this.myCompany.contact = user;
+    },
+    updateCompany() {
+      // TODO: update in backend
+      EventBus.$emit('snackbar', {
+        text: 'Not implemented',
+        color: 'error',
+      });
     },
   },
 
