@@ -4,9 +4,12 @@
       <slot></slot>
     </div>
     <div slot="activator" v-else>
-      <v-btn flat icon>
-        <v-icon>{{create ? 'add':'edit'}}</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <v-btn icon slot="activator">
+          <v-icon>{{create ? 'add':'edit'}}</v-icon>
+        </v-btn>
+        <span>{{create ? 'Create Interview':'Update Interview'}}</span>
+      </v-tooltip>
     </div>
 
     <v-card>
