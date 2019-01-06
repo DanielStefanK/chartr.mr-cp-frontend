@@ -1,6 +1,7 @@
 query justCompany {
   myCompany {
     id
+    credits
     name
     contact {
       id
