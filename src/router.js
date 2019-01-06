@@ -110,6 +110,18 @@ const router = new Router({
           component: () =>
             import(/* webpackChunkName: "createcompany" */ './views/ControlPanel/CreateCompany.vue'),
         },
+        {
+          path: 'earnCredits',
+          name: 'earnCredits',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+          },
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () =>
+            import(/* webpackChunkName: "earnCredits" */ './views/ControlPanel/EarnCredits.vue'),
+        },
       ],
     },
     {

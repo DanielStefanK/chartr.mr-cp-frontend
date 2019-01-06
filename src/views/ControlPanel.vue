@@ -43,12 +43,15 @@
       <v-menu v-model="creditsMenu" :close-on-content-click="false" :nudge-width="200" offset-y>
         <v-btn slot="activator" color="accent" dark>
           <v-icon>monetization_on</v-icon>
-          {{me ? me.company.credits ? me.company.credits : 'none': '-'}}
+          {{myCompany ? myCompany.credits : '-'}}
         </v-btn>
         <v-card>
-          <v-card-text>Your company has {{me ? me.company.credits ? me.company.credits : 'none': '-'}} credits</v-card-text>
+          <v-card-text>
+            Your company has
+            {{myCompany ? myCompany.credits : '-'}} credits
+          </v-card-text>
           <v-card-actions>
-            <v-btn color="primary">earn credits</v-btn>
+            <v-btn color="primary" @click="onEarnCredits">earn credits</v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -93,14 +96,10 @@ export default {
           id
           name
           email
-          company {
-            id
-            name
-            credits
-          }
         }
       }
     `,
+    myCompany: require('@/graphql/myCompanyQuery.gql'),
   },
 
   computed: {
@@ -130,6 +129,10 @@ export default {
     async logout() {
       await onLogout(this.$apollo.provider.defaultClient);
       this.$router.push({ name: 'login' });
+    },
+    onEarnCredits() {
+      this.creditsMenu = false;
+      this.$router.push({ name: 'earnCredits' });
     },
   },
   created() {
