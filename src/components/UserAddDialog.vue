@@ -76,7 +76,6 @@ export default {
 
   methods: {
     async add() {
-      //todo validate user input
       this.isLoading = true;
       this.error = false;
       if (this.users) {

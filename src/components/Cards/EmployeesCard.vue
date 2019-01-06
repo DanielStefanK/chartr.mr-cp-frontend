@@ -15,7 +15,6 @@
     <v-card-actions>
       <v-spacer/>
       <v-btn icon @click="$router.push ({name: 'editemployees'})">
-        <!--TODO: route to edit employees-->
         <v-icon>edit</v-icon>
       </v-btn>
     </v-card-actions>

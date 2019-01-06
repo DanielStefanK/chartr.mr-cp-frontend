@@ -82,7 +82,6 @@ export default {
             name: this.myCompany.name,
             contact: this.myCompany.contact.id,
           },
-          //TODO: update cache
         })
         .then(() => {
           EventBus.$emit('snackbar', {
