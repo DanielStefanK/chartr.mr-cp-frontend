@@ -12,6 +12,7 @@
       </v-flex>
     </transition-group>
     <v-flex xs12 v-if="depth<=3">
+      <!-- TODO: TOOLTIP -->
       <v-btn @click="addQuestion" icon>
         <v-icon>add</v-icon>
       </v-btn>

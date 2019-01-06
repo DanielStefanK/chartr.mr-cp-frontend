@@ -7,6 +7,7 @@
           <template slot="header">Additional</template>
           <v-card>
             <v-card-text>
+              <!-- TODO: Validation -->
               <v-combobox
                 v-model="question.answerTags"
                 label="Good answer tags"
@@ -83,8 +84,6 @@
 </template>
 
 <script>
-import Questions from '@/components/Questions.vue';
-
 export default {
   name: 'QuestionEditCard',
   props: {

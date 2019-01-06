@@ -8,6 +8,7 @@
           </v-card-title>
 
           <v-card-text>
+            <!-- TODO: validation -->
             <v-layout row wrap>
               <v-flex xs12 sm6 cmd4>
                 <v-text-field
@@ -42,6 +43,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
+            <!-- TODO: make it work -->
             <v-btn color="primary">Submit</v-btn>
           </v-card-actions>
         </v-card>
