@@ -1,8 +1,8 @@
 <template>
-  <v-card color="grey lighten-3" class="elevation-3">
+  <v-card color="grey" class="elevation-3 black--text">
     <v-card-text>
       <v-text-field v-model="question.question" name="question" label="Question" type="text"></v-text-field>
-      <v-expansion-panel popout expand>
+      <v-expansion-panel expand>
         <v-expansion-panel-content>
           <template slot="header">Additional</template>
           <v-card>

@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
-      <v-flex sm12 md8>
+      <v-flex sm12 md12>
         <v-card>
           <v-card-title>
             <div class="headline">Create Template</div>
