@@ -33,6 +33,13 @@ const routePerimeter = {
     },
     redirect: 'dashboard',
   },
+
+  ISADMIN: {
+    check(user) {
+      return user && user.permissions.find(perm => perm === 'ADMIN');
+    },
+    redirect: 'dashboard',
+  },
 };
 
 const router = new Router({
@@ -46,6 +53,7 @@ const router = new Router({
           path: '',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: true,
             icon: 'home',
             title: 'Dashboard',
           },
@@ -57,6 +65,7 @@ const router = new Router({
           path: 'editemployees',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: true,
             icon: 'contacts',
             title: 'Edit Employees',
           },
@@ -68,6 +77,7 @@ const router = new Router({
           path: 'editcompany',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: true,
             icon: 'business',
             title: 'Edit Company',
           },
@@ -79,6 +89,7 @@ const router = new Router({
           path: 'interview/list',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: true,
             icon: 'forum',
             title: 'Interviews',
           },
@@ -90,6 +101,7 @@ const router = new Router({
           path: 'result/list',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: true,
             icon: 'face',
             title: 'Results',
           },
@@ -102,6 +114,7 @@ const router = new Router({
           name: 'createcompany',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASNOCOMPANY],
+            showInNavigation: false,
             hideDrawer: true,
           },
           // route level code-splitting
@@ -115,12 +128,26 @@ const router = new Router({
           name: 'earnCredits',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: false,
           },
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
           // which is lazy-loaded when the route is visited.
           component: () =>
             import(/* webpackChunkName: "earnCredits" */ './views/ControlPanel/EarnCredits.vue'),
+        },
+        {
+          path: 'createTemplate',
+          name: 'createTemplate',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.ISADMIN],
+            showInNavigation: false,
+          },
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () =>
+            import(/* webpackChunkName: "createTemplate" */ './views/ControlPanel/CreateTemplate.vue'),
         },
       ],
     },

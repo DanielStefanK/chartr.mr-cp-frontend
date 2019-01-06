@@ -108,13 +108,15 @@ export default {
     },
 
     routes() {
-      return this.$router.options.routes[0].children.map(route => {
-        return {
-          id: route.name,
-          icon: route.meta.icon,
-          title: route.meta.title,
-        };
-      });
+      return this.$router.options.routes[0].children
+        .filter(route => route.meta.showInNavigation)
+        .map(route => {
+          return {
+            id: route.name,
+            icon: route.meta.icon,
+            title: route.meta.title,
+          };
+        });
     },
   },
 
