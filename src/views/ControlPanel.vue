@@ -40,6 +40,19 @@
       <v-toolbar-side-icon v-if="showDrawer" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Charter</v-toolbar-title>
       <v-spacer/>
+      <v-menu v-model="creditsMenu" :close-on-content-click="false" :nudge-width="200" offset-y>
+        <v-btn slot="activator" color="accent" dark>
+          <v-icon>monetization_on</v-icon>
+          {{me ? me.company.credits ? me.company.credits : 'none': '-'}}
+        </v-btn>
+        <v-card>
+          <v-card-text>Your company has {{me ? me.company.credits ? me.company.credits : 'none': '-'}} credits</v-card-text>
+          <v-card-actions>
+            <v-btn color="primary">earn credits</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
+
       <v-tooltip bottom>
         <v-btn @click="logout" slot="activator" flat icon>
           <v-icon>input</v-icon>
@@ -70,6 +83,7 @@ export default {
   data: () => ({
     drawer: null,
     dark: false,
+    creditsMenu: false,
   }),
 
   apollo: {
@@ -79,6 +93,11 @@ export default {
           id
           name
           email
+          company {
+            id
+            name
+            credits
+          }
         }
       }
     `,
