@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="500">
+  <v-dialog v-model="dialog" fullscreen lazy>
     <div slot="activator" v-if="this.$slots.default">
       <slot></slot>
     </div>
@@ -13,25 +13,88 @@
     </div>
 
     <v-card>
-      <v-card-title primary-title>
-        <div>
-          <div class="headline">Interview</div>
-        </div>
-      </v-card-title>
-      <v-card-text>TODO</v-card-text>
+      <v-toolbar dark color="primary">
+        <v-btn icon dark @click="dialog = false">
+          <v-icon>close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Interview</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items>
+          <v-btn dark flat @click="dialogSave = true">Save</v-btn>
+          <interview-save-dialog @save="onSave" @cancel="onCancel" :value="dialogSave"/>
+        </v-toolbar-items>
+      </v-toolbar>
+      <v-card-text>
+        <v-container fluid fill-height>
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm8 lg6>
+              <questions ref="questions" :depth="0" v-model="internalquestions"/>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import Questions from '@/components/Questions.vue';
+import InterviewSaveDialog from './InterviewSaveDialog';
+
 export default {
   props: {
     create: Boolean,
+    questions: Array,
   },
+
+  components: {
+    Questions,
+    InterviewSaveDialog,
+  },
+
   data() {
     return {
       dialog: false,
+      dialogSave: false,
+      internalquestions: [],
     };
+  },
+
+  methods: {
+    onSave(additional) {
+      const questions = this.$refs.questions.buildQuestions(this.questions);
+
+      this.$emit('save', {
+        data: {
+          ...additional,
+          interview: {
+            create: questions,
+          },
+        },
+        cb: () => {
+          this.dialogSave = false;
+          this.dialog = false;
+          this.reset();
+        },
+      });
+    },
+    onCancel() {
+      this.dialogSave = false;
+    },
+
+    reset() {
+      this.internalquestions = [];
+    },
+  },
+
+  watch: {
+    questions() {
+      this.internalquestions = JSON.parse(JSON.stringify(this.questions));
+    },
+  },
+
+  created() {
+    this.internalquestions = JSON.parse(JSON.stringify(this.questions));
   },
 };
 </script>

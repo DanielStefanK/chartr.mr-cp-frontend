@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <transition-group name="list" tag="p" v-if="depth<=3">
-      <v-flex xs12 v-for="(q,idx) in questions" :key="q.id">
+      <v-flex xs12 v-for="(q,idx) in questions" :key="q.id" mb-3>
         <question-edit-card
           :subQuestion="subQuestions"
           v-model="q.question"
@@ -13,9 +13,12 @@
     </transition-group>
     <v-flex xs12 v-if="depth<=3">
       <!-- TODO: TOOLTIP -->
-      <v-btn @click="addQuestion" icon>
-        <v-icon>add</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <v-btn slot="activator" @click="addQuestion" icon>
+          <v-icon>add</v-icon>
+        </v-btn>
+        <span>{{depth === 0 ? 'Add Question':'Add Sub-Question'}}</span>
+      </v-tooltip>
     </v-flex>
   </v-layout>
 </template>
@@ -41,6 +44,30 @@ export default {
   },
 
   methods: {
+    buildQuestions(questions, no = 0) {
+      return questions.map(({ question: q }) => ({
+        number: no++,
+        question: q.question,
+        distraction: q.distraction,
+        time: q.time,
+        matchTags: {
+          set: q.matchTags,
+        },
+        givenAnswers: {
+          set: q.givenAnswers,
+        },
+        answerTags: {
+          set: q.answerTags,
+        },
+        subQuestions:
+          q.subQuestions && q.subQuestions.length > 0
+            ? {
+                create: this.buildQuestions(q.subQuestions, no),
+              }
+            : [],
+      }));
+    },
+
     addQuestion() {
       this.questions.push({
         id:

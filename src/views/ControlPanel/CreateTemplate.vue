@@ -10,7 +10,7 @@
           <v-card-text>
             <!-- TODO: validation -->
             <v-layout row wrap>
-              <v-flex xs12 sm6 cmd4>
+              <v-flex xs12 sm6 md4>
                 <v-text-field
                   :disabled="isLoading"
                   v-model="name"
@@ -43,7 +43,6 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <!-- TODO: make it work -->
             <v-btn color="primary" @click="onSubmit">Submit</v-btn>
           </v-card-actions>
         </v-card>

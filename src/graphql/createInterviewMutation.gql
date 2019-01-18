@@ -1,0 +1,7 @@
+# import * from './schema.graphql'
+mutation createInterview($data: InterviewCreateInput!) {
+  createInterview(data: $data) {
+    newBalance
+    id
+  }
+}
