@@ -44,7 +44,7 @@
           <v-card-actions>
             <v-spacer/>
             <!-- TODO: make it work -->
-            <v-btn color="primary">Submit</v-btn>
+            <v-btn color="primary" @click="onSubmit">Submit</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -54,6 +54,7 @@
 
 <script>
 import Questions from '@/components/Questions.vue';
+import { EventBus } from '@/utils/eventBus';
 
 export default {
   data() {
@@ -86,6 +87,64 @@ export default {
     remove(item) {
       this.params.splice(this.params.indexOf(item), 1);
       this.params = [...this.params];
+    },
+    onSubmit() {
+      const params = this.buildParams();
+      this.$apollo
+        .mutate({
+          mutation: require('@/graphql/createTemplateMutation.gql'),
+
+          variables: {
+            data: params,
+          },
+        })
+        .then(() => {
+          EventBus.$emit('snackbar', {
+            text: 'Successfully created Template!',
+            color: 'success',
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          EventBus.$emit('snackbar', {
+            text: 'could not create template!',
+            color: 'error',
+          });
+        });
+    },
+
+    buildParams() {
+      return {
+        name: this.name,
+        params: this.params,
+        interview: {
+          create: this.buildQuestions(this.questions),
+        },
+      };
+    },
+
+    buildQuestions(questions, no = 0) {
+      return questions.map(({ question: q }) => ({
+        number: no++,
+        question: q.question,
+        distraction: q.distraction,
+        time: q.time,
+        matchTags: {
+          set: q.matchTags,
+        },
+        givenAnswers: {
+          set: q.givenAnswers,
+        },
+        answerTags: {
+          set: q.answerTags,
+        },
+        subQuestions:
+          q.subQuestions && q.subQuestions.length > 0
+            ? {
+                create: this.buildQuestions(q.subQuestions, no),
+              }
+            : [],
+      }));
     },
   },
 

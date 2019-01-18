@@ -1,0 +1,7 @@
+# import * from './schema.graphql'
+mutation createTemplate($data: TemplateCreateInput) {
+  createTemplate(data: $data) {
+    id
+    name
+  }
+}

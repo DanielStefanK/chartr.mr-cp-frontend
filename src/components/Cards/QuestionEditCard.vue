@@ -48,7 +48,7 @@
               />
               <v-text-field
                 clearable
-                v-model="question.time"
+                v-model="time"
                 name="time"
                 label="Time in seconds"
                 type="number"
@@ -137,6 +137,17 @@ export default {
         this.$emit('input', this.question);
       },
       deep: true,
+    },
+  },
+
+  computed: {
+    time: {
+      get() {
+        return this.question.time;
+      },
+      set(val) {
+        this.question.time = Number.parseInt(val);
+      },
     },
   },
 

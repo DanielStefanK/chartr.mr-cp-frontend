@@ -1,9 +1,10 @@
 # source: http://localhost:4000
-# timestamp: Fri Dec 21 2018 10:56:35 GMT+0100 (GMT+01:00)
+# timestamp: Fri Jan 18 2019 10:03:15 GMT+0100 (GMT+01:00)
 
 type Company implements Node {
   id: ID!
   name: String!
+  credits: Int
   deleted: Boolean!
   contact: User!
   employees(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -11,6 +12,62 @@ type Company implements Node {
   results(where: ResultWhereInput, orderBy: ResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Result!]
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input CompanyCreateOneWithoutContactInput {
+  create: CompanyCreateWithoutContactInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateOneWithoutEmployeesInput {
+  create: CompanyCreateWithoutEmployeesInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateOneWithoutInterviewsInput {
+  create: CompanyCreateWithoutInterviewsInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateOneWithoutResultsInput {
+  create: CompanyCreateWithoutResultsInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateWithoutContactInput {
+  name: String!
+  credits: Int
+  deleted: Boolean
+  employees: UserCreateManyWithoutCompanyInput
+  interviews: InterviewCreateManyWithoutCompanyInput
+  results: ResultCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateWithoutEmployeesInput {
+  name: String!
+  credits: Int
+  deleted: Boolean
+  contact: UserCreateOneWithoutContactOfInput!
+  interviews: InterviewCreateManyWithoutCompanyInput
+  results: ResultCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateWithoutInterviewsInput {
+  name: String!
+  credits: Int
+  deleted: Boolean
+  contact: UserCreateOneWithoutContactOfInput!
+  employees: UserCreateManyWithoutCompanyInput
+  results: ResultCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateWithoutResultsInput {
+  name: String!
+  credits: Int
+  deleted: Boolean
+  contact: UserCreateOneWithoutContactOfInput!
+  employees: UserCreateManyWithoutCompanyInput
+  interviews: InterviewCreateManyWithoutCompanyInput
 }
 
 input CompanyWhereInput {
@@ -102,6 +159,28 @@ input CompanyWhereInput {
 
   """All values not ending with the given string."""
   name_not_ends_with: String
+  credits: Int
+
+  """All values that are not equal to given value."""
+  credits_not: Int
+
+  """All values that are contained in given list."""
+  credits_in: [Int!]
+
+  """All values that are not contained in given list."""
+  credits_not_in: [Int!]
+
+  """All values less than the given value."""
+  credits_lt: Int
+
+  """All values less than or equal the given value."""
+  credits_lte: Int
+
+  """All values greater than the given value."""
+  credits_gt: Int
+
+  """All values greater than or equal the given value."""
+  credits_gte: Int
   deleted: Boolean
 
   """All values that are not equal to given value."""
@@ -162,6 +241,10 @@ input CompanyWhereInput {
   results_none: ResultWhereInput
 }
 
+input CompanyWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 type Interview implements Node {
@@ -176,6 +259,66 @@ type Interview implements Node {
   limit: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input InterviewCreateManyWithoutCompanyInput {
+  create: [InterviewCreateWithoutCompanyInput!]
+  connect: [InterviewWhereUniqueInput!]
+}
+
+input InterviewCreateManyWithoutCreatorInput {
+  create: [InterviewCreateWithoutCreatorInput!]
+  connect: [InterviewWhereUniqueInput!]
+}
+
+input InterviewCreateOneWithoutInterviewInput {
+  create: InterviewCreateWithoutInterviewInput
+  connect: InterviewWhereUniqueInput
+}
+
+input InterviewCreateOneWithoutResultsInput {
+  create: InterviewCreateWithoutResultsInput
+  connect: InterviewWhereUniqueInput
+}
+
+input InterviewCreateWithoutCompanyInput {
+  name: String!
+  inactive: Boolean
+  deleted: Boolean
+  limit: Int
+  creator: UserCreateOneWithoutInterviewsInput!
+  interview: QuestionCreateManyWithoutInterviewInput
+  results: ResultCreateManyWithoutInterviewInput
+}
+
+input InterviewCreateWithoutCreatorInput {
+  name: String!
+  inactive: Boolean
+  deleted: Boolean
+  limit: Int
+  company: CompanyCreateOneWithoutInterviewsInput!
+  interview: QuestionCreateManyWithoutInterviewInput
+  results: ResultCreateManyWithoutInterviewInput
+}
+
+input InterviewCreateWithoutInterviewInput {
+  name: String!
+  inactive: Boolean
+  deleted: Boolean
+  limit: Int
+  company: CompanyCreateOneWithoutInterviewsInput!
+  creator: UserCreateOneWithoutInterviewsInput!
+  results: ResultCreateManyWithoutInterviewInput
+}
+
+input InterviewCreateWithoutResultsInput {
+  name: String!
+  inactive: Boolean
+  deleted: Boolean
+  limit: Int
+  company: CompanyCreateOneWithoutInterviewsInput!
+  creator: UserCreateOneWithoutInterviewsInput!
+  interview: QuestionCreateManyWithoutInterviewInput
 }
 
 enum InterviewOrderByInput {
@@ -368,6 +511,10 @@ input InterviewWhereInput {
   results_none: ResultWhereInput
 }
 
+input InterviewWhereUniqueInput {
+  id: ID
+}
+
 """Raw JSON value"""
 scalar Json
 
@@ -382,12 +529,26 @@ type Mutation {
   createOwnCompany(name: String!, employees: [UserCreateWithoutCompanyInput!]!): Company!
   addEmployee(name: String!, email: String!, password: String!): User!
   removeEmployee(id: ID!): User!
+  updateOwnCompany(name: String, contact: ID!): Company!
+  addCredits(amount: Int!): Int!
+  createTemplate(data: TemplateCreateInput): Template!
 }
 
 """An object with an ID"""
 interface Node {
   """The id of the object."""
   id: ID!
+}
+
+enum Permission {
+  ADMIN
+  USER
+  CREATEINTERVIEW
+  SEERESULTS
+  EDITINTERVIEW
+  CLOSEINTERVIEW
+  DELETEINTERVIEW
+  EDITPERMISSIONS
 }
 
 type Query {
@@ -412,6 +573,90 @@ type Question implements Node {
   interview: Interview!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input QuestionCreateanswerTagsInput {
+  set: [String!]
+}
+
+input QuestionCreategivenAnswersInput {
+  set: [String!]
+}
+
+input QuestionCreateManyWithoutInterviewInput {
+  create: [QuestionCreateWithoutInterviewInput!]
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionCreateManyWithoutParentQuestionInput {
+  create: [QuestionCreateWithoutParentQuestionInput!]
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionCreateManyWithoutParentTemplateInput {
+  create: [QuestionCreateWithoutParentTemplateInput!]
+  connect: [QuestionWhereUniqueInput!]
+}
+
+input QuestionCreatematchTagsInput {
+  set: [String!]
+}
+
+input QuestionCreateOneWithoutSubQuestionsInput {
+  create: QuestionCreateWithoutSubQuestionsInput
+  connect: QuestionWhereUniqueInput
+}
+
+input QuestionCreateWithoutInterviewInput {
+  number: Int!
+  question: String!
+  distraction: Int
+  time: Int
+  answerTags: QuestionCreateanswerTagsInput
+  matchTags: QuestionCreatematchTagsInput
+  givenAnswers: QuestionCreategivenAnswersInput
+  parentTemplate: TemplateCreateOneWithoutInterviewInput
+  parentQuestion: QuestionCreateOneWithoutSubQuestionsInput
+  subQuestions: QuestionCreateManyWithoutParentQuestionInput
+}
+
+input QuestionCreateWithoutParentQuestionInput {
+  number: Int!
+  question: String!
+  distraction: Int
+  time: Int
+  answerTags: QuestionCreateanswerTagsInput
+  matchTags: QuestionCreatematchTagsInput
+  givenAnswers: QuestionCreategivenAnswersInput
+  parentTemplate: TemplateCreateOneWithoutInterviewInput
+  subQuestions: QuestionCreateManyWithoutParentQuestionInput
+  interview: InterviewCreateOneWithoutInterviewInput!
+}
+
+input QuestionCreateWithoutParentTemplateInput {
+  number: Int!
+  question: String!
+  distraction: Int
+  time: Int
+  answerTags: QuestionCreateanswerTagsInput
+  matchTags: QuestionCreatematchTagsInput
+  givenAnswers: QuestionCreategivenAnswersInput
+  parentQuestion: QuestionCreateOneWithoutSubQuestionsInput
+  subQuestions: QuestionCreateManyWithoutParentQuestionInput
+  interview: InterviewCreateOneWithoutInterviewInput!
+}
+
+input QuestionCreateWithoutSubQuestionsInput {
+  number: Int!
+  question: String!
+  distraction: Int
+  time: Int
+  answerTags: QuestionCreateanswerTagsInput
+  matchTags: QuestionCreatematchTagsInput
+  givenAnswers: QuestionCreategivenAnswersInput
+  parentTemplate: TemplateCreateOneWithoutInterviewInput
+  parentQuestion: QuestionCreateOneWithoutSubQuestionsInput
+  interview: InterviewCreateOneWithoutInterviewInput!
 }
 
 enum QuestionOrderByInput {
@@ -638,6 +883,10 @@ input QuestionWhereInput {
   interview: InterviewWhereInput
 }
 
+input QuestionWhereUniqueInput {
+  id: ID
+}
+
 type Result implements Node {
   id: ID!
   deleted: Boolean!
@@ -652,6 +901,40 @@ type Result implements Node {
   company: Company!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input ResultCreateManyWithoutCompanyInput {
+  create: [ResultCreateWithoutCompanyInput!]
+  connect: [ResultWhereUniqueInput!]
+}
+
+input ResultCreateManyWithoutInterviewInput {
+  create: [ResultCreateWithoutInterviewInput!]
+  connect: [ResultWhereUniqueInput!]
+}
+
+input ResultCreateWithoutCompanyInput {
+  deleted: Boolean
+  ip: String
+  long: Float
+  lat: Float
+  name: String
+  email: String
+  score: Int
+  content: Json!
+  interview: InterviewCreateOneWithoutResultsInput!
+}
+
+input ResultCreateWithoutInterviewInput {
+  deleted: Boolean
+  ip: String
+  long: Float
+  lat: Float
+  name: String
+  email: String
+  score: Int
+  content: Json!
+  company: CompanyCreateOneWithoutResultsInput!
 }
 
 enum ResultOrderByInput {
@@ -966,6 +1249,10 @@ input ResultWhereInput {
   company: CompanyWhereInput
 }
 
+input ResultWhereUniqueInput {
+  id: ID
+}
+
 type Template implements Node {
   id: ID!
   deleted: Boolean!
@@ -974,6 +1261,24 @@ type Template implements Node {
   params: Json
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input TemplateCreateInput {
+  deleted: Boolean
+  name: String!
+  params: Json
+  interview: QuestionCreateManyWithoutParentTemplateInput
+}
+
+input TemplateCreateOneWithoutInterviewInput {
+  create: TemplateCreateWithoutInterviewInput
+  connect: TemplateWhereUniqueInput
+}
+
+input TemplateCreateWithoutInterviewInput {
+  deleted: Boolean
+  name: String!
+  params: Json
 }
 
 input TemplateWhereInput {
@@ -1118,6 +1423,10 @@ input TemplateWhereInput {
   interview_none: QuestionWhereInput
 }
 
+input TemplateWhereUniqueInput {
+  id: ID
+}
+
 type User {
   id: ID!
   email: String!
@@ -1131,10 +1440,49 @@ type User {
   updatedAt: DateTime!
 }
 
+input UserCreateManyWithoutCompanyInput {
+  create: [UserCreateWithoutCompanyInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutContactOfInput {
+  create: UserCreateWithoutContactOfInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutInterviewsInput {
+  create: UserCreateWithoutInterviewsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreatepermissionsInput {
+  set: [Permission!]
+}
+
 input UserCreateWithoutCompanyInput {
   email: String!
   name: String!
   password: String!
+}
+
+input UserCreateWithoutContactOfInput {
+  email: String!
+  deleted: Boolean
+  name: String!
+  password: String!
+  permissions: UserCreatepermissionsInput
+  company: CompanyCreateOneWithoutEmployeesInput
+  interviews: InterviewCreateManyWithoutCreatorInput
+}
+
+input UserCreateWithoutInterviewsInput {
+  email: String!
+  deleted: Boolean
+  name: String!
+  password: String!
+  permissions: UserCreatepermissionsInput
+  company: CompanyCreateOneWithoutEmployeesInput
+  contactOf: CompanyCreateOneWithoutContactInput
 }
 
 enum UserOrderByInput {
@@ -1376,4 +1724,9 @@ input UserWhereInput {
   interviews_some: InterviewWhereInput
   interviews_none: InterviewWhereInput
   contactOf: CompanyWhereInput
+}
+
+input UserWhereUniqueInput {
+  id: ID
+  email: String
 }
