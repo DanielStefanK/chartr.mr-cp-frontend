@@ -45,24 +45,25 @@ export default {
 
   methods: {
     buildQuestions(questions, no = 0) {
-      return questions.map(({ question: q }) => ({
+      console.log(questions);
+      return questions.map(({ question }) => ({
         number: no++,
-        question: q.question,
-        distraction: q.distraction,
-        time: q.time,
+        question: question.question,
+        distraction: question.distraction,
+        time: question.time,
         matchTags: {
-          set: q.matchTags,
+          set: question.matchTags,
         },
         givenAnswers: {
-          set: q.givenAnswers,
+          set: question.givenAnswers,
         },
         answerTags: {
-          set: q.answerTags,
+          create: question.answerTags,
         },
         subQuestions:
-          q.subQuestions && q.subQuestions.length > 0
+          question.subQuestions && question.subQuestions.length > 0
             ? {
-                create: this.buildQuestions(q.subQuestions, no),
+                create: this.buildQuestions(question.subQuestions, no),
               }
             : [],
       }));

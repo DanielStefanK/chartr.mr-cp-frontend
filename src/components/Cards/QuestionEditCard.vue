@@ -8,21 +8,7 @@
           <v-card>
             <v-card-text>
               <!-- TODO: Validation -->
-              <v-combobox
-                v-model="question.answerTags"
-                label="Good answer tags"
-                chips
-                clearable
-                multiple
-              >
-                <template slot="selection" slot-scope="data">
-                  <v-chip
-                    :selected="data.selected"
-                    close
-                    @input="removeAnswerTags(data.item)"
-                  >{{ data.item }}</v-chip>
-                </template>
-              </v-combobox>
+              <answer-tags-input v-model="question.answerTags"/>
               <v-combobox
                 v-if="subQuestion"
                 v-model="question.matchTags"
@@ -53,7 +39,7 @@
                 label="Time in seconds"
                 type="number"
               ></v-text-field>
-              <v-combobox
+              <!-- ** <v-combobox
                 v-model="question.givenAnswers"
                 label="Given Answers"
                 chips
@@ -67,7 +53,7 @@
                     @input="removeGivenAnswers(data.item)"
                   >{{ data.item }}</v-chip>
                 </template>
-              </v-combobox>
+              </v-combobox>-->
               <questions :depth="depth+1" subQuestions v-model="question.subQuestions"/>
             </v-card-text>
           </v-card>
@@ -84,8 +70,15 @@
 </template>
 
 <script>
+import AnswerTagsInput from '../Inputs/AnswerTagsInput';
+
 export default {
   name: 'QuestionEditCard',
+
+  components: {
+    AnswerTagsInput,
+  },
+
   props: {
     value: Object,
     subQuestion: Boolean,

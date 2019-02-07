@@ -62,7 +62,9 @@ export default {
 
   methods: {
     onSave(additional) {
-      const questions = this.$refs.questions.buildQuestions(this.questions);
+      const questions = this.$refs.questions.buildQuestions(
+        this.internalquestions,
+      );
 
       this.$emit('save', {
         data: {
