@@ -1,6 +1,6 @@
 <template>
   <v-layout column>
-    <transition-group name="list" tag="p" v-if="depth<=3">
+    <transition-group name="list" tag="p" v-if="depth<=2">
       <v-flex xs12 v-for="(q,idx) in questions" :key="q.id" mb-3>
         <question-edit-card
           :subQuestion="subQuestions"
@@ -11,7 +11,7 @@
         />
       </v-flex>
     </transition-group>
-    <v-flex xs12 v-if="depth<=3">
+    <v-flex xs12 v-if="depth<=2">
       <!-- TODO: TOOLTIP -->
       <v-tooltip bottom>
         <v-btn slot="activator" @click="addQuestion" icon>
@@ -44,9 +44,9 @@ export default {
   },
 
   methods: {
-    buildQuestions(questions, no = 0) {
+    buildQuestions(questions, no = 0, sub = false) {
       return questions.map(({ question }) => {
-        this.checkValidity(question);
+        this.checkValidity(question, sub);
 
         return {
           number: no++,
@@ -65,25 +65,28 @@ export default {
           subQuestions:
             question.subQuestions && question.subQuestions.length > 0
               ? {
-                  create: this.buildQuestions(question.subQuestions, no),
+                  create: this.buildQuestions(question.subQuestions, no, true),
                 }
               : [],
         };
       });
     },
 
-    checkValidity(q) {
-      console.log(q);
+    checkValidity(q, sub) {
       if (!q.question || q.question === '') {
         throw 'Question cannot be empty';
       }
 
-      if (!q.answerTags || q.answerTags.length == 0) {
+      if (!q.answerTags || q.answerTags.length === 0) {
         throw 'Answer Tags cannot be empty';
       }
 
       if (q.time && !Number.isInteger(q.time)) {
-        throw 'Time must be an number';
+        throw 'Time must be a number';
+      }
+
+      if (sub && (!q.matchTags || q.matchTags.length === 0)) {
+        throw 'Match tags of subquestion cannot be empty';
       }
     },
 
