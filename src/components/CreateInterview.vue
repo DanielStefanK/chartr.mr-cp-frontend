@@ -82,7 +82,8 @@ export default {
             store.writeQuery({ query: COMPANY_QUERY, data });
           },
         })
-        .then(() => {
+        .then(({ data }) => {
+          console.log({ id: data.createInterview.id });
           params.cb();
           this.reset();
           EventBus.$emit('snackbar', {
