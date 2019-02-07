@@ -20,7 +20,7 @@
         <v-toolbar-title>Interview</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn dark flat @click="dialogSave = true">Save</v-btn>
+          <v-btn dark flat @click="onSaveDialog">Save</v-btn>
           <interview-save-dialog @save="onSave" @cancel="onCancel" :value="dialogSave"/>
         </v-toolbar-items>
       </v-toolbar>
@@ -62,6 +62,20 @@ export default {
   },
 
   methods: {
+    onSaveDialog() {
+      try {
+        this.$refs.questions.buildQuestions(this.internalquestions);
+        this.dialogSave = true;
+      } catch (ex) {
+        console.log(ex);
+
+        EventBus.$emit('snackbar', {
+          text: ex,
+          color: 'error',
+        });
+      }
+    },
+
     onSave(additional) {
       try {
         const questions = this.$refs.questions.buildQuestions(
