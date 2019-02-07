@@ -104,7 +104,6 @@ export default {
           });
         })
         .catch(err => {
-          console.log(err);
           EventBus.$emit('snackbar', {
             text: 'could not create template!',
             color: 'error',

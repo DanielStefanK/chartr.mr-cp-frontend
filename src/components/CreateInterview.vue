@@ -83,6 +83,7 @@ export default {
           },
         })
         .then(({ data }) => {
+          // eslint-disable-next-line no-console
           console.log({ id: data.createInterview.id });
           params.cb();
           this.reset();
@@ -92,7 +93,6 @@ export default {
           });
         })
         .catch(err => {
-          console.log(err);
           EventBus.$emit('snackbar', {
             text: 'could not create Interview!',
             color: 'error',

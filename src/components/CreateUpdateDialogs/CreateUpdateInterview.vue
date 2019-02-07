@@ -67,8 +67,6 @@ export default {
         this.$refs.questions.buildQuestions(this.internalquestions);
         this.dialogSave = true;
       } catch (ex) {
-        console.log(ex);
-
         EventBus.$emit('snackbar', {
           text: ex,
           color: 'error',
@@ -96,8 +94,6 @@ export default {
           },
         });
       } catch (ex) {
-        console.log(ex);
-
         EventBus.$emit('snackbar', {
           text: ex,
           color: 'error',
