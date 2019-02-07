@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/eventBus';
 import Questions from '@/components/Questions.vue';
 import InterviewSaveDialog from './InterviewSaveDialog';
 
@@ -62,23 +63,32 @@ export default {
 
   methods: {
     onSave(additional) {
-      const questions = this.$refs.questions.buildQuestions(
-        this.internalquestions,
-      );
+      try {
+        const questions = this.$refs.questions.buildQuestions(
+          this.internalquestions,
+        );
 
-      this.$emit('save', {
-        data: {
-          ...additional,
-          interview: {
-            create: questions,
+        this.$emit('save', {
+          data: {
+            ...additional,
+            interview: {
+              create: questions,
+            },
           },
-        },
-        cb: () => {
-          this.dialogSave = false;
-          this.dialog = false;
-          this.reset();
-        },
-      });
+          cb: () => {
+            this.dialogSave = false;
+            this.dialog = false;
+            this.reset();
+          },
+        });
+      } catch (ex) {
+        console.log(ex);
+
+        EventBus.$emit('snackbar', {
+          text: ex,
+          color: 'error',
+        });
+      }
     },
     onCancel() {
       this.dialogSave = false;

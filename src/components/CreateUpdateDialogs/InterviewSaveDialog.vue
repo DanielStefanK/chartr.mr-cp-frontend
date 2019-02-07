@@ -87,11 +87,13 @@ export default {
     },
 
     onSubmit() {
-      this.$emit('save', {
-        name: this.name,
-        activeUntil: moment(this.activeUntil).toISOString(),
-        limit: this.limit,
-      });
+      if (this.name && this.name !== '') {
+        this.$emit('save', {
+          name: this.name,
+          activeUntil: moment(this.activeUntil).toISOString(),
+          limit: this.limit,
+        });
+      }
     },
     onCancel() {
       this.$emit('cancel');

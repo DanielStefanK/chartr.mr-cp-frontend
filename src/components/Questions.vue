@@ -45,28 +45,46 @@ export default {
 
   methods: {
     buildQuestions(questions, no = 0) {
-      console.log(questions);
-      return questions.map(({ question }) => ({
-        number: no++,
-        question: question.question,
-        distraction: question.distraction,
-        time: question.time,
-        matchTags: {
-          set: question.matchTags,
-        },
-        givenAnswers: {
-          set: question.givenAnswers,
-        },
-        answerTags: {
-          create: question.answerTags,
-        },
-        subQuestions:
-          question.subQuestions && question.subQuestions.length > 0
-            ? {
-                create: this.buildQuestions(question.subQuestions, no),
-              }
-            : [],
-      }));
+      return questions.map(({ question }) => {
+        this.checkValidity(question);
+
+        return {
+          number: no++,
+          question: question.question,
+          distraction: question.distraction,
+          time: question.time,
+          matchTags: {
+            set: question.matchTags,
+          },
+          givenAnswers: {
+            set: question.givenAnswers,
+          },
+          answerTags: {
+            create: question.answerTags,
+          },
+          subQuestions:
+            question.subQuestions && question.subQuestions.length > 0
+              ? {
+                  create: this.buildQuestions(question.subQuestions, no),
+                }
+              : [],
+        };
+      });
+    },
+
+    checkValidity(q) {
+      console.log(q);
+      if (!q.question || q.question === '') {
+        throw 'Question cannot be empty';
+      }
+
+      if (!q.answerTags || q.answerTags.length == 0) {
+        throw 'Answer Tags cannot be empty';
+      }
+
+      if (q.time && !Number.isInteger(q.time)) {
+        throw 'Time must be an number';
+      }
     },
 
     addQuestion() {
