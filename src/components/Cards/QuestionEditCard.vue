@@ -7,7 +7,6 @@
           <template slot="header">Additional</template>
           <v-card>
             <v-card-text>
-              <!-- TODO: Validation -->
               <answer-tags-input v-model="question.answerTags"/>
               <v-combobox
                 v-if="subQuestion"

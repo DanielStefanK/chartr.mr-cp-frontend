@@ -101,7 +101,7 @@ const router = new Router({
           path: 'result/list',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
-            showInNavigation: true,
+            showInNavigation: false,
             icon: 'face',
             title: 'Results',
           },

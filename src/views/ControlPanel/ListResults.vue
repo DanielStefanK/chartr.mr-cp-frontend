@@ -6,7 +6,6 @@
           <v-card-title>
             <v-layout justify-space-between>
               <div class="headline">Results</div>
-              <!-- TODO: Add filter -->
             </v-layout>
           </v-card-title>
 

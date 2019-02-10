@@ -123,7 +123,6 @@ export default {
             });
           })
           .catch(error => {
-            // TODO: better error handling
             EventBus.$emit('snackbar', {
               text: error.message,
               color: 'error',

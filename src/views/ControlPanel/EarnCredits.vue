@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: Real checkout -->
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex sm12 md8>
