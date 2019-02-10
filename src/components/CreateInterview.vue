@@ -92,7 +92,7 @@ export default {
             color: 'success',
           });
         })
-        .catch(err => {
+        .catch(() => {
           EventBus.$emit('snackbar', {
             text: 'could not create Interview!',
             color: 'error',
