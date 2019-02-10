@@ -77,7 +77,7 @@ export default {
       pagination: {
         descending: false,
         page: 1,
-        rowsPerPage: 5, // -1 for All
+        rowsPerPage: 10, // -1 for All
         sortBy: 'name',
       },
     };
