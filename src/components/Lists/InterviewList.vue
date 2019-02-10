@@ -43,12 +43,12 @@ export default {
   },
 
   apollo: {
+    $deep: true,
     myInterviews: {
       query: require('@/graphql/myInterviewsQuery.gql'),
       variables() {
         return this.vars;
       },
-      deep: true,
     },
     myInterviewsConnection: {
       query: require('@/graphql/myInterviewsConnectionQuery.gql'),
@@ -82,12 +82,6 @@ export default {
       },
     };
   },
-  watch: {
-    vars() {
-      this.$apollo.queries.myInterviews.refetch();
-    },
-  },
-
   computed: {
     vars: {
       get() {
@@ -99,7 +93,7 @@ export default {
           },
           ...(this.pagination.sortBy
             ? {
-                orderby:
+                orderBy:
                   this.pagination.sortBy +
                   (this.pagination.descending ? '_DESC' : '_ASC'),
               }
