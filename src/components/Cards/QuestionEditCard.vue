@@ -60,7 +60,7 @@
       </v-expansion-panel>
     </v-card-text>
     <v-card-actions>
-      <v-spacer/>
+      <v-spacer></v-spacer>
       <v-btn icon ripple @click="remove">
         <v-icon color="error lighten-1">delete</v-icon>
       </v-btn>

@@ -1,0 +1,12 @@
+# import * from './schema.graphql'
+
+query myInterviewsConnection(
+  $where: InterviewWhereInput
+  $orderBy: InterviewOrderByInput
+) {
+  myInterviewsConnection(where: $where, orderBy: $orderBy) {
+    aggregate {
+      count
+    }
+  }
+}
