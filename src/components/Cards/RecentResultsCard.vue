@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <div>
     <v-card-title primary-title>
       <div>
         <div class="headline">Recent Results</div>
@@ -15,7 +15,7 @@
       </template>
       <template v-else>No Results yet</template>
     </v-card-text>
-  </v-card>
+  </div>
 </template>
 
 <script>

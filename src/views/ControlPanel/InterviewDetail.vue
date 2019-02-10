@@ -6,7 +6,7 @@
     <template v-else>
       <v-card-title>
         <v-layout justify-space-between>
-          <div class="headline">Interview</div>
+          <div class="headline">Interview</div>//TODO: delete/edit button
         </v-layout>
       </v-card-title>
       <v-card-text>
