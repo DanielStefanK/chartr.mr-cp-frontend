@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout>
-      <v-flex md10 sm12>
+      <v-flex lg10 sm12>
         <v-card>
           <v-card-title>
             <v-layout justify-space-between>
