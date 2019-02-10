@@ -37,9 +37,18 @@ export default {
   },
 
   data() {
-    return {
-      questions: null,
-    };
+    return {};
+  },
+
+  computed: {
+    questions: {
+      get() {
+        return this.value;
+      },
+      set(newVal) {
+        this.$emit('input', newVal);
+      },
+    },
   },
 
   methods: {
@@ -111,16 +120,6 @@ export default {
       this.questions.splice(idx, 1);
       this.questions = [...this.questions];
     },
-  },
-
-  watch: {
-    questions() {
-      this.$emit('input', this.questions);
-    },
-  },
-
-  created() {
-    this.questions = JSON.parse(JSON.stringify(this.value));
   },
 
   components: {

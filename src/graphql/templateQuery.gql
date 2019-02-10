@@ -1,0 +1,49 @@
+# import * from './schema.graphql'
+
+query template($id: ID!) {
+  template(id: $id) {
+    id
+    name
+    params
+    interview {
+      question
+      answerTags {
+        tag
+        value
+      }
+      matchTags
+      distraction
+      time
+      subQuestions {
+        question
+        answerTags {
+          tag
+          value
+        }
+        matchTags
+        distraction
+        time
+        subQuestions {
+          question
+          answerTags {
+            tag
+            value
+          }
+          matchTags
+          distraction
+          time
+          subQuestions {
+            question
+            answerTags {
+              tag
+              value
+            }
+            matchTags
+            distraction
+            time
+          }
+        }
+      }
+    }
+  }
+}

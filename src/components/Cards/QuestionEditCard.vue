@@ -88,17 +88,7 @@ export default {
   },
 
   data() {
-    return {
-      question: {
-        question: '',
-        answerTags: [],
-        matchTags: [],
-        distraction: 0,
-        time: null,
-        givenAnswers: [],
-        subQuestions: [],
-      },
-    };
+    return {};
   },
   methods: {
     remove() {
@@ -139,6 +129,14 @@ export default {
       },
       set(val) {
         this.question.time = Number.parseInt(val);
+      },
+    },
+    question: {
+      get() {
+        return this.value;
+      },
+      set(newVal) {
+        this.$emit('input', newVal);
       },
     },
   },

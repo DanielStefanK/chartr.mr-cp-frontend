@@ -56,7 +56,7 @@ export default {
     this.internalTags = cloneDeep(this.value);
   },
 
-  watchers: {
+  watch: {
     value: {
       handler() {
         this.internalTags = cloneDeep(this.value);

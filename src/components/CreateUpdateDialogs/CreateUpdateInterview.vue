@@ -20,6 +20,8 @@
         <v-toolbar-title>Interview</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
+          <v-btn dark flat @click="dialogTempalte = true">from template</v-btn>
+          <from-template-dialog v-model="dialogTempalte" @newTemplate="fromTemplate"/>
           <v-btn dark flat @click="onSaveDialog">Save</v-btn>
           <interview-save-dialog @save="onSave" @cancel="onCancel" :value="dialogSave"/>
         </v-toolbar-items>
@@ -38,9 +40,13 @@
 </template>
 
 <script>
+import cloneDeep from 'lodash/cloneDeep';
+
 import { EventBus } from '@/utils/eventBus';
+
 import Questions from '@/components/Questions.vue';
 import InterviewSaveDialog from './InterviewSaveDialog';
+import FromTemplateDialog from './FromTemplateDialog';
 
 export default {
   props: {
@@ -51,12 +57,14 @@ export default {
   components: {
     Questions,
     InterviewSaveDialog,
+    FromTemplateDialog,
   },
 
   data() {
     return {
       dialog: false,
       dialogSave: false,
+      dialogTempalte: false,
       internalquestions: [],
     };
   },
@@ -102,6 +110,10 @@ export default {
     },
     onCancel() {
       this.dialogSave = false;
+    },
+
+    fromTemplate(qs) {
+      this.internalquestions = cloneDeep(qs);
     },
 
     reset() {
