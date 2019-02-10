@@ -1,0 +1,16 @@
+# import * from './schema.graphql'
+
+query interview($id: ID!) {
+  interview(id: $id) {
+    id
+    name
+    activeUntil
+    deleted
+    creator {
+      id
+      name
+    }
+    limit
+    createdAt
+  }
+}

@@ -1,0 +1,80 @@
+<template>
+  <v-card>
+    <template v-if="$apollo.loading || !interview">
+      <v-progress-linear indeterminate/>
+    </template>
+    <template v-else>
+      <v-card-title>
+        <v-layout justify-space-between>
+          <div class="headline">Interview</div>
+        </v-layout>
+      </v-card-title>
+      <v-card-text>
+        <v-layout>
+          <v-flex xs12 md6>
+            <v-card>
+              <v-card-title>
+                <h4>Name: &nbsp;</h4>
+                {{ interview.name }}
+              </v-card-title>
+              <v-divider></v-divider>
+              <v-list dense>
+                <v-list-tile>
+                  <v-list-tile-content>Creator:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{ interview.creator.name }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Created At:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{ formatDate(interview.createdAt) }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Active Until:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{ formatDate(interview.activeUntil) }}</v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Deleted:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">
+                    <v-icon
+                      :color="interview.deleted ? 'success' : 'error'"
+                    >{{interview.deleted ? 'check_circle': 'cancel'}}</v-icon>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-content>Limit Results:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">{{ interview.limit }}</v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-card>
+          </v-flex>// TODO: Result Table
+        </v-layout>
+      </v-card-text>
+    </template>
+  </v-card>
+</template>
+
+<script>
+import moment from 'moment';
+
+export default {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  apollo: {
+    interview: {
+      query: require('@/graphql/interviewQuery.gql'),
+      variables() {
+        return { id: this.id };
+      },
+    },
+  },
+
+  methods: {
+    formatDate(date) {
+      return moment(date).format('MM.DD.YYYY, h:mm:ss a');
+    },
+  },
+};
+</script>

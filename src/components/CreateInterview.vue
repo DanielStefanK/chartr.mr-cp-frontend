@@ -67,6 +67,7 @@ export default {
           variables: {
             data: params.data,
           },
+          refetchQueries: ['myInterviews', 'myInterviewsConnection'],
           update: (
             store,
             {
@@ -90,6 +91,10 @@ export default {
           EventBus.$emit('snackbar', {
             text: 'Successfully created Interview!',
             color: 'success',
+          });
+          this.$router.push({
+            name: 'interviewDetails',
+            params: { id: data.createInterview.id },
           });
         })
         .catch(() => {

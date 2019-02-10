@@ -137,6 +137,17 @@ const router = new Router({
             import(/* webpackChunkName: "earnCredits" */ './views/ControlPanel/EarnCredits.vue'),
         },
         {
+          path: 'interview/details/:id',
+          name: 'interviewDetails',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: false,
+          },
+          component: () =>
+            import(/* webpackChunkName: "createTemplate" */ './views/ControlPanel/InterviewDetail.vue'),
+          props: route => ({ id: route.params.id }),
+        },
+        {
           path: 'createTemplate',
           name: 'createTemplate',
           meta: {

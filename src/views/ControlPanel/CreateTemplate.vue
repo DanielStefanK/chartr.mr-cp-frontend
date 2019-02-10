@@ -134,7 +134,7 @@ export default {
           set: q.givenAnswers,
         },
         answerTags: {
-          set: q.answerTags,
+          create: q.answerTags,
         },
         subQuestions:
           q.subQuestions && q.subQuestions.length > 0

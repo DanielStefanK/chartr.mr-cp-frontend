@@ -8,7 +8,11 @@
     class="elevation-1"
   >
     <template slot="items" slot-scope="props">
-      <td>{{ props.item.name }}</td>
+      <td>
+        <router-link
+          :to="{name: 'interviewDetails', params: {id: props.item.id}}"
+        >{{ props.item.name }}</router-link>
+      </td>
       <td class="text-xs-right">{{ formatDate(props.item.activeUntil) }}</td>
       <td class="text-xs-right">{{ props.item.creator.name }}</td>
       <td class="text-xs-right">{{ formatDate(props.item.createdAt) }}</td>
