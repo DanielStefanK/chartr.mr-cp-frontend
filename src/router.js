@@ -152,7 +152,9 @@ const router = new Router({
           name: 'createTemplate',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.ISADMIN],
-            showInNavigation: false,
+            showInNavigation: true,
+            icon: 'layers',
+            title: 'Create Template',
           },
           // route level code-splitting
           // this generates a separate chunk (about.[hash].js) for this route
@@ -257,3 +259,17 @@ router.beforeEach(async (to, from, next) => {
 });
 
 export default router;
+
+export function testPerimeter(routePerimeter, user) {
+  if (routePerimeter) {
+    const faultyPerimeter = routePerimeter.find(
+      perimeter => !perimeter.check(user),
+    );
+
+    if (faultyPerimeter) {
+      return false;
+    }
+    return true;
+  }
+  return true;
+}

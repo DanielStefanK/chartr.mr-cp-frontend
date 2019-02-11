@@ -3,7 +3,7 @@
     <v-layout :reverse="$vuetify.breakpoint.xsOnly" :column="$vuetify.breakpoint.xsOnly" wrap>
       <v-flex xs12 sm7>
         <v-card-title primary-title>
-          <div v-if="$apollo.loading">Loading...</div>
+          <div v-if="$apollo.loading || !myCompany">Loading...</div>
           <div v-else>
             <div class="headline">{{myCompany.name}}</div>
             <div>Contact: {{myCompany.contact.name}} ({{myCompany.contact.email}})</div>

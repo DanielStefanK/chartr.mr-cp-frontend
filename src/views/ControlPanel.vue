@@ -80,6 +80,7 @@
 import gql from 'graphql-tag';
 import { onLogout } from '../plugins/vue-apollo.js';
 
+import { testPerimeter } from '../router.js';
 import { EventBus } from '@/utils/eventBus';
 
 export default {
@@ -95,7 +96,11 @@ export default {
         me {
           id
           name
+          company {
+            id
+          }
           email
+          permissions
         }
       }
     `,
@@ -109,7 +114,11 @@ export default {
 
     routes() {
       return this.$router.options.routes[0].children
-        .filter(route => route.meta.showInNavigation)
+        .filter(
+          route =>
+            route.meta.showInNavigation &&
+            testPerimeter(route.meta.perimeter, this.me),
+        )
         .map(route => {
           return {
             id: route.name,
