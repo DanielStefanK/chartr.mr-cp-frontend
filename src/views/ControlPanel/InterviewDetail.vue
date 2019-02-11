@@ -9,7 +9,13 @@
           <template v-else>
             <v-card-title>
               <v-layout justify-space-between>
-                <div class="headline">Interview</div>//TODO: delete/edit button
+                <div class="headline noStyleLink">
+                  Interview
+                  <a :href="link">
+                    <v-icon>input</v-icon>
+                  </a>
+                  </div>
+                //TODO: delete/edit button
               </v-layout>
             </v-card-title>
             <v-card-text>
@@ -55,7 +61,9 @@
                     </v-list>
                   </v-card>
                 </v-flex>
-                <v-flex xs12 md6>// TODO: Result Table</v-flex>
+                <v-flex xs12 md6>
+                  // TODO: show results
+                </v-flex>
               </v-layout>
             </v-card-text>
           </template>
@@ -75,12 +83,19 @@ export default {
       required: true,
     },
   },
+
   apollo: {
     interview: {
       query: require('@/graphql/interviewQuery.gql'),
       variables() {
         return { id: this.id };
       },
+    },
+  },
+
+  computed: {
+    link() {
+      return process.env.VUE_APP_INTERVIEW_URL + '#/interview/' + this.id;
     },
   },
 
@@ -91,3 +106,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.noStyleLink a {
+  text-decoration: none;
+}
+</style>
