@@ -11,7 +11,7 @@
               <v-layout justify-space-between>
                 <div class="headline noStyleLink">
                   Interview
-                  <a :href="link">
+                  <a :href="link" target="_blank">
                     <v-icon>input</v-icon>
                   </a>
                   </div>
