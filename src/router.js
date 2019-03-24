@@ -144,7 +144,18 @@ const router = new Router({
             showInNavigation: false,
           },
           component: () =>
-            import(/* webpackChunkName: "createTemplate" */ './views/ControlPanel/InterviewDetail.vue'),
+            import(/* webpackChunkName: "interviewDetail" */ './views/ControlPanel/InterviewDetail.vue'),
+          props: route => ({ id: route.params.id }),
+        },
+        {
+          path: 'result/details/:id',
+          name: 'resultDetails',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: false,
+          },
+          component: () =>
+            import(/* webpackChunkName: "resultDetail" */ './views/ControlPanel/ResultDetail.vue'),
           props: route => ({ id: route.params.id }),
         },
         {

@@ -1,0 +1,28 @@
+# import * from './schema.graphql'
+
+query myResults(
+  $where: ResultWhereInput
+  $orderBy: ResultOrderByInput
+  $skip: Int
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  myResults(
+    where: $where
+    orderBy: $orderBy
+    skip: $skip
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    id
+    name
+    deleted
+    email
+    score
+    createdAt
+  }
+}
