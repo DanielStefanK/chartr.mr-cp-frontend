@@ -36,7 +36,7 @@ export default {
       filter: {
         name: '',
         creator: '',
-        active: 'all',
+        active: 'active',
       },
     };
   },

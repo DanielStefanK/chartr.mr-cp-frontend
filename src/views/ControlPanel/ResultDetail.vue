@@ -48,7 +48,9 @@
                       </v-list>
                     </v-card>
                   </v-flex>
-                  <v-flex xs12>//TODO: display interview</v-flex>
+                  <v-flex xs12>
+                    <chat-review-card :content="result.content"/>
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -62,7 +64,13 @@
 <script>
 import moment from 'moment';
 
+import ChatReviewCard from '@/components/Cards/ChatReviewCard.vue';
+
 export default {
+  components: {
+    ChatReviewCard,
+  },
+
   props: {
     id: {
       type: String,

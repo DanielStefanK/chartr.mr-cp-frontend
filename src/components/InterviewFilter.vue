@@ -36,7 +36,7 @@ import isEqual from 'lodash/isEqual';
 const getDefault = () => ({
   name: '',
   creator: '',
-  active: 'all',
+  active: 'active',
 });
 
 export default {
@@ -52,7 +52,7 @@ export default {
       internalFilter: {
         name: '',
         creator: '',
-        active: 'all',
+        active: 'active',
       },
       filter: null,
 
