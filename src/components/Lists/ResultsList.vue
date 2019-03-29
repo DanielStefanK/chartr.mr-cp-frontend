@@ -77,10 +77,10 @@ export default {
         { text: 'Score', align: 'right', value: 'score' },
       ],
       pagination: {
-        descending: false,
+        descending: true,
         page: 1,
         rowsPerPage: 10, // -1 for All
-        sortBy: 'name',
+        sortBy: 'score',
       },
     };
   },
