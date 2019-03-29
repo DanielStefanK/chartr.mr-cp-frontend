@@ -17,7 +17,7 @@
         </v-flex>
       </template>
       <v-flex xs8>
-        <v-card color="white" mt-0>
+        <v-card mt-0>
           <p class="text-xs-left px-2 py-1">{{pair.a && pair.a!== '' ? pair.a : '-'}}</p>
           <p class="py-0 my-0 pr-2 text-xs-right" style="color: grey">{{secondsSince}} seconds</p>
         </v-card>
