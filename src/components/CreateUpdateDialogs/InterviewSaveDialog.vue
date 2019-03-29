@@ -24,7 +24,7 @@
               ></v-date-picker>
             </v-menu>
           </v-flex>
-          <v-flex xs12>Cost: {{cost}} Credits</v-flex>
+          <v-flex xs12>Cost: {{cost}} $</v-flex>
         </v-layout>
       </v-card-text>
 
@@ -66,7 +66,9 @@ export default {
       return Math.max(
         10,
         Math.round(
-          (this.limit * moment(this.activeUntil).diff(moment(), 'days')) / 10,
+          (1 / 30) *
+            moment(this.activeUntil).diff(moment(), 'days') *
+            (this.limit * 0.1),
         ),
       );
     },

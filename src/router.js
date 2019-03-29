@@ -124,8 +124,8 @@ const router = new Router({
             import(/* webpackChunkName: "createcompany" */ './views/ControlPanel/CreateCompany.vue'),
         },
         {
-          path: 'earnCredits',
-          name: 'earnCredits',
+          path: 'addbalance',
+          name: 'addbalance',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
             showInNavigation: false,

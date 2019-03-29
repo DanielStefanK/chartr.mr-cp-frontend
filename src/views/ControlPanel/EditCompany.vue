@@ -7,9 +7,9 @@
             <v-layout justify-space-between>
               <div class="headline">Company</div>
               <div>
-                Credits: {{myCompany.credits}}
+                Balance: {{myCompany.credits}}
                 <br>Earn more
-                <router-link :to="{name: 'earnCredits'}">here</router-link>
+                <router-link :to="{name: 'addBalance'}">here</router-link>
               </div>
             </v-layout>
           </v-card-title>

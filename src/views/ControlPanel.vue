@@ -43,15 +43,15 @@
       <v-menu v-model="creditsMenu" :close-on-content-click="false" :nudge-width="200" offset-y>
         <v-btn slot="activator" color="accent" dark>
           <v-icon>monetization_on</v-icon>
-          {{myCompany ? myCompany.credits : '-'}}
+          {{myCompany ? myCompany.credits : '- $'}}
         </v-btn>
         <v-card>
           <v-card-text>
             Your company has
-            {{myCompany ? myCompany.credits : '-'}} credits
+            {{myCompany ? myCompany.credits : '- $'}} $
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="onEarnCredits">earn credits</v-btn>
+            <v-btn color="primary" @click="onEarnCredits">add balance</v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -143,7 +143,7 @@ export default {
     },
     onEarnCredits() {
       this.creditsMenu = false;
-      this.$router.push({ name: 'earnCredits' });
+      this.$router.push({ name: 'addbalance' });
     },
   },
   created() {

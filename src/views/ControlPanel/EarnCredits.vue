@@ -4,7 +4,7 @@
       <v-flex sm12 md8>
         <v-card>
           <v-card-title>
-            <div class="headline">Earn Credits</div>
+            <div class="headline">Add Balance</div>
           </v-card-title>
           <v-card-text>
             <v-layout column>
