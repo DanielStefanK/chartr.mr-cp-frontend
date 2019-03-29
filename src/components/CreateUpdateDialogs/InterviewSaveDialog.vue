@@ -68,7 +68,7 @@ export default {
         Math.round(
           (1 / 30) *
             moment(this.activeUntil).diff(moment(), 'days') *
-            (this.limit * 0.1),
+            ((this.limit || 1) * 0.1),
         ),
       );
     },
