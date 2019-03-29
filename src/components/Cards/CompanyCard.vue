@@ -9,7 +9,7 @@
             <div>Contact: {{myCompany.contact.name}} ({{myCompany.contact.email}})</div>
             <div>Employees: {{myCompany.employees.length}}</div>
             <div>Interviews: {{myCompany.interviews.length}}</div>
-            <div>Balance: {{myCompany.credits}}$</div>
+            <div>Balance: {{myCompany.credits}} $</div>
           </div>
         </v-card-title>
       </v-flex>
