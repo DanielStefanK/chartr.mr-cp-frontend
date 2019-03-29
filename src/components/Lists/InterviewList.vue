@@ -79,10 +79,10 @@ export default {
         { text: 'Active', sortable: false, align: 'right', value: 'deleted' },
       ],
       pagination: {
-        descending: false,
+        descending: true,
         page: 1,
         rowsPerPage: 10, // -1 for All
-        sortBy: 'name',
+        sortBy: 'createdAt',
       },
     };
   },
