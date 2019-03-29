@@ -14,7 +14,8 @@
                   <a :href="link" target="_blank">
                     <v-icon>input</v-icon>
                   </a>
-                </div>//TODO: delete/edit button
+                </div>
+                <link-page :link="link"/>
               </v-layout>
             </v-card-title>
             <v-card-text>
@@ -78,10 +79,12 @@
 import moment from 'moment';
 
 import ResultList from '../../components/Lists/ResultsList.vue';
+import LinkPage from '@/components/InterviewLinkDialog';
 
 export default {
   components: {
     ResultList,
+    LinkPage,
   },
 
   props: {
