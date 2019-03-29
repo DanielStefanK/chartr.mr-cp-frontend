@@ -8,7 +8,7 @@
               <div class="headline">Company</div>
               <div>
                 Balance: {{myCompany.credits}} $
-                <br>Earn more
+                <br>add balance
                 <router-link :to="{name: 'addbalance'}">here</router-link>
               </div>
             </v-layout>
