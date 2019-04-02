@@ -98,6 +98,18 @@ const router = new Router({
             import(/* webpackChunkName: "listinterviews" */ './views/ControlPanel/ListInterviews.vue'),
         },
         {
+          path: 'interview/create',
+          meta: {
+            perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
+            showInNavigation: false,
+            icon: 'forum',
+            title: 'Interviews',
+          },
+          name: 'interviewcreate',
+          component: () =>
+            import(/* webpackChunkName: "creaateinterviews" */ './views/ControlPanel/InterviewCreate.vue'),
+        },
+        {
           path: 'result/list',
           meta: {
             perimeter: [routePerimeter.LOGGEDIN, routePerimeter.HASCOMPANY],
