@@ -1,10 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12 md4>
-      <v-text-field
-        v-model="tag"
-        label="Tag"
-        @keyup.enter="add" />
+      <v-text-field :error-messages="errorMessages" v-model="tag" label="Tag" @keyup.enter="add"/>
     </v-flex>
     <v-flex xs12 md6>
       <v-slider
@@ -43,6 +40,10 @@ import cloneDeep from 'lodash/cloneDeep';
 export default {
   props: {
     value: {
+      type: Array,
+      default: () => [],
+    },
+    errorMessages: {
       type: Array,
       default: () => [],
     },

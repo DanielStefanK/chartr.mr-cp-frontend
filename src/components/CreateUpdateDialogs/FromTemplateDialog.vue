@@ -99,21 +99,19 @@ export default {
 
     buildQuestion(root) {
       return {
+        ...root,
         id:
           '_' +
           Math.random()
             .toString(36)
             .substr(2, 9),
-        question: {
-          ...root,
-          question: this.replaceParams(root.question),
-          matchTags: root.matchTags.map(item => this.replaceParams(item)),
-          answerTags: root.answerTags.map(item => ({
-            tag: this.replaceParams(item.tag),
-            value: item.value,
-          })),
-          subQuestions: root.subQuestions.map(item => this.buildQuestion(item)),
-        },
+        question: this.replaceParams(root.question),
+        matchTags: root.matchTags.map(item => this.replaceParams(item)),
+        answerTags: root.answerTags.map(item => ({
+          tag: this.replaceParams(item.tag),
+          value: item.value,
+        })),
+        subQuestions: root.subQuestions.map(item => this.buildQuestion(item)),
       };
     },
 

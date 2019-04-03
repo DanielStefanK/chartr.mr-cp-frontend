@@ -6,7 +6,12 @@
           <v-card-title>
             <v-layout justify-space-between>
               <div class="headline">Interviews</div>
-              <create-interview/>
+              <v-tooltip bottom>
+                <v-btn icon slot="activator" :to="{name: 'interviewcreate'}">
+                  <v-icon>add</v-icon>
+                </v-btn>
+                <span>Create Interview</span>
+              </v-tooltip>
             </v-layout>
           </v-card-title>
 
@@ -22,13 +27,11 @@
 
 <script>
 import InterviewList from '@/components/Lists/InterviewList.vue';
-import CreateInterview from '@/components/CreateInterview.vue';
 import InterviewFilter from '@/components/InterviewFilter.vue';
 
 export default {
   components: {
     InterviewList,
-    CreateInterview,
     InterviewFilter,
   },
   data() {

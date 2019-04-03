@@ -9,14 +9,14 @@
   >
     <v-flex
       xs12
-      :class="{sm6:depth<1&&clonedQuestions.length >1} "
+      :class="{sm6:depth>0&&depth<2&&clonedQuestions.length >1} "
       v-for="el in clonedQuestions"
       :key="el.id"
     >
       <v-card :color=" depth%2==1 ? 'blue-grey lighten-3' : 'blue-grey darken-2'">
-        <v-card-title>
-          <v-layout justify-space-between>
-            <v-flex shrink>
+        <v-card-actions>
+          <v-card-title>
+            <v-layout column wrap>
               <p class="title">
                 {{el.question}}
                 <v-tooltip bottom>
@@ -35,13 +35,22 @@
                   </span>
                 </v-tooltip>
               </p>
-              <v-chip v-for="c in el.matchTags" :key="c">{{c}}</v-chip>
-            </v-flex>
-            <v-flex>
-              <edit-question-dialog :question="el" :subQuestion="depth>0" @save="save"/>
-            </v-flex>
-          </v-layout>
-        </v-card-title>
+              <v-flex>
+                <template v-if="depth !== 0">
+                  <v-chip v-for="c in el.matchTags" :key="c">{{c}}</v-chip>
+                </template>
+              </v-flex>
+            </v-layout>
+          </v-card-title>
+          <v-spacer></v-spacer>
+          <edit-question-dialog
+            :question="el"
+            :subQuestion="depth>0"
+            @save="save"
+            @delete="onDelete(el)"
+          />
+        </v-card-actions>
+
         <v-card-text>
           <nested-question :depth="depth+1" v-model="el.subQuestions"/>
         </v-card-text>
@@ -62,25 +71,33 @@ export default {
     },
     depth: {
       type: Number,
-      default: 1,
+      default: 0,
     },
-  },
-  data() {
-    return {
-      clonedQuestions: [],
-    };
-  },
-  created() {
-    this.clonedQuestions = JSON.parse(JSON.stringify(this.value));
   },
   watch: {
-    clonedQuestions: {
+    value: {
       handler() {
-        this.$emit('input', this.clonedQuestions);
+        if (this.depth >= 2) {
+          this.clonedQuestions = this.clonedQuestions.map(q => ({
+            ...q,
+            subQuestions: [],
+          }));
+        }
       },
-      deep: true
+      deep: true,
     },
   },
+  computed: {
+    clonedQuestions: {
+      get() {
+        return this.value;
+      },
+      set() {
+        this.$emit('input', this.clonedQuestions);
+      },
+    },
+  },
+
   components: {
     draggable,
     EditQuestionDialog,
@@ -90,7 +107,14 @@ export default {
       const index = this.clonedQuestions.findIndex(i => {
         return q.id === i.id;
       });
-      this.clonedQuestions[index] = q;
+      this.clonedQuestions.splice(index, 1, q);
+      this.$emit('input', this.clonedQuestions);
+    },
+    onDelete(q) {
+      const index = this.clonedQuestions.findIndex(i => {
+        return q.id === i.id;
+      });
+      this.clonedQuestions.splice(index, 1);
       this.$emit('input', this.clonedQuestions);
     },
   },

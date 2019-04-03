@@ -70,9 +70,6 @@
         </v-slide-y-transition>
       </v-container>
     </v-content>
-    <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2017 Chartr</span>
-    </v-footer>
   </v-app>
 </template>
 

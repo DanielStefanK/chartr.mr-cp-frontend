@@ -5,7 +5,7 @@
         <v-card>
           <v-card-text>
             <v-layout row wrap justify-center>
-              <v-flex xs6>
+              <v-flex xs4>
                 <draggable
                   tag="div"
                   :list="copyList"
@@ -17,8 +17,18 @@
                   </v-card>
                 </draggable>
               </v-flex>
-              <v-flex xs6>
+              <v-flex xs4>
                 <v-btn @click="add">add</v-btn>
+              </v-flex>
+              <v-flex xs4>
+                <v-btn @click="onSaveDialog">Save</v-btn>
+                <interview-save-dialog
+                  @save="onSaveInterview"
+                  @cancel="onCancel"
+                  :value="dialogSave"
+                />
+                <v-btn flat @click="dialogTempalte = true">from template</v-btn>
+                <from-template-dialog v-model="dialogTempalte" @newTemplate="fromTemplate"/>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -30,50 +40,8 @@
             <p class="title">Interview</p>
           </v-card-title>
           <v-card-text>
-            <v-container grid-list-md class="dragArea">
-              <draggable
-                :list="questions"
-                bubbleScroll
-                tag="div"
-                class="layout row wrap"
-                :group="{ name: 'questions', pull: true, put: true }"
-              >
-                <v-flex xs12 v-for="el in questions" :key="el.id">
-                  <v-card color="blue-grey darken-2">
-                    <v-card-title>
-                      <v-layout justify-space-between>
-                        <v-flex shrink>
-                          <p class="title">
-                            {{el.question}}
-                            <v-tooltip bottom>
-                              <template slot="activator">
-                                <v-icon color="success" dark>info</v-icon>
-                              </template>
-                              <span>
-                                <p>time: {{el.time ? el.time : '-'}}&nbsp;</p>
-                                <p>distaction: {{el.distraction}}</p>
-                                <v-flex xs6>
-                                  <v-chip v-for="c in el.answerTags" :key="c.tag">
-                                    <v-avatar class="teal">{{c.value}}</v-avatar>
-                                    {{c.tag}}
-                                  </v-chip>
-                                </v-flex>
-                              </span>
-                            </v-tooltip>
-                          </p>
-                        </v-flex>
-                        <v-spacer/>
-                        <v-flex>
-                          <edit-question-dialog :question="el"/>
-                        </v-flex>
-                      </v-layout>
-                    </v-card-title>
-                    <v-card-text>
-                      <nested-question v-model="el.subQuestions"/>
-                    </v-card-text>
-                  </v-card>
-                </v-flex>
-              </draggable>
+            <v-container grid-list-md>
+              <nested-question :value="questions" @input="input"/>
             </v-container>
           </v-card-text>
         </v-card>
@@ -82,19 +50,29 @@
   </v-container>
 </template>
 <script>
+import { EventBus } from '@/utils/eventBus';
+
+import COMPANY_QUERY from '@/graphql/myCompanyQuery.gql';
 import Draggable from 'vuedraggable';
 import NestedQuestion from '@/components/NestedQuestion';
-import EditQuestionDialog from '@/components/EditQuestionDialog';
+import cloneDeep from 'lodash/cloneDeep';
+
+import InterviewSaveDialog from '@/components/CreateUpdateDialogs/InterviewSaveDialog';
+
+import FromTemplateDialog from '@/components/CreateUpdateDialogs/FromTemplateDialog';
 
 export default {
   components: {
     Draggable,
     NestedQuestion,
-    EditQuestionDialog,
+    InterviewSaveDialog,
+    FromTemplateDialog,
   },
 
   data() {
     return {
+      dialogSave: false,
+      dialogTempalte: false,
       copyList: [
         {
           id: 123,
@@ -117,12 +95,103 @@ export default {
         subQuestions: [],
         time: null,
         distraction: 0,
-        answerTags: [],
-        matchTags: [],
+        answerTags: [{ tag: 'goodTag', value: 100 }],
+        matchTags: ['matchme'],
       };
     },
     add() {
-      this.questions.push(this.clone({ question: 'New Question' }));
+      this.questions = [
+        ...this.questions,
+        this.clone({ question: 'New Question' }),
+      ];
+    },
+    input(q) {
+      this.questions = [...q];
+    },
+    onSaveDialog() {
+      this.dialogSave = true;
+    },
+    onSaveInterview(additional) {
+      const questions = this.buildQuestions(this.questions);
+      console.log(questions);
+
+      this.$apollo
+        .mutate({
+          mutation: require('@/graphql/createInterviewMutation.gql'),
+          variables: {
+            data: {
+              ...additional,
+              interview: {
+                create: questions,
+              },
+            },
+          },
+          refetchQueries: ['myInterviews', 'myInterviewsConnection'],
+          update: (
+            store,
+            {
+              data: {
+                createInterview: { newBalance },
+              },
+            },
+          ) => {
+            const data = store.readQuery({
+              query: COMPANY_QUERY,
+            });
+            data.myCompany.credits = newBalance;
+            store.writeQuery({ query: COMPANY_QUERY, data });
+          },
+        })
+        .then(({ data }) => {
+          this.dialogSave = false;
+          this.dialog = false;
+          EventBus.$emit('snackbar', {
+            text: 'Successfully created Interview!',
+            color: 'success',
+          });
+          this.$router.push({
+            name: 'interviewDetails',
+            params: { id: data.createInterview.id },
+          });
+        })
+        .catch(() => {
+          EventBus.$emit('snackbar', {
+            text: 'could not create Interview!',
+            color: 'error',
+          });
+        });
+    },
+    onCancel() {
+      this.dialogSave = false;
+    },
+    buildQuestions(q, no = 0, sub = false) {
+      console.log(q);
+      return q.map(question => {
+        return {
+          number: no++,
+          question: question.question,
+          distraction: question.distraction,
+          time: question.time,
+          matchTags: sub
+            ? {
+                set: question.matchTags,
+              }
+            : [],
+          givenAnswers: null,
+          answerTags: {
+            create: question.answerTags,
+          },
+          subQuestions:
+            question.subQuestions && question.subQuestions.length > 0
+              ? {
+                  create: this.buildQuestions(question.subQuestions, no, true),
+                }
+              : [],
+        };
+      });
+    },
+    fromTemplate(qs) {
+      this.questions = cloneDeep(qs);
     },
   },
 };
