@@ -15,7 +15,10 @@
                     <v-icon>input</v-icon>
                   </a>
                 </div>
-                <link-page :link="link"/>
+                <v-layout justify-end>
+                  <interview-delete v-if="!interview.deleted" :id="interview.id"/>
+                  <link-page :link="link"/>
+                </v-layout>
               </v-layout>
             </v-card-title>
             <v-card-text>
@@ -80,11 +83,13 @@ import moment from 'moment';
 
 import ResultList from '../../components/Lists/ResultsList.vue';
 import LinkPage from '@/components/InterviewLinkDialog';
+import InterviewDelete from '@/components/InterviewDelete';
 
 export default {
   components: {
     ResultList,
     LinkPage,
+    InterviewDelete,
   },
 
   props: {
