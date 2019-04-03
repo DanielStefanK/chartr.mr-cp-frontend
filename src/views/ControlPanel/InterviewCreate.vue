@@ -39,7 +39,7 @@
                 :group="{ name: 'questions', pull: true, put: true }"
               >
                 <v-flex xs12 v-for="el in questions" :key="el.id">
-                  <v-card color="blue-grey lighten-3">
+                  <v-card color="blue-grey darken-2">
                     <v-card-title>
                       <v-layout justify-space-between>
                         <v-flex shrink>
@@ -64,12 +64,12 @@
                         </v-flex>
                         <v-spacer/>
                         <v-flex>
-                          <edit-question-dialog/>
+                          <edit-question-dialog :question="el"/>
                         </v-flex>
                       </v-layout>
                     </v-card-title>
                     <v-card-text>
-                      <nested-question :questions="el.subQuestions"/>
+                      <nested-question v-model="el.subQuestions"/>
                     </v-card-text>
                   </v-card>
                 </v-flex>

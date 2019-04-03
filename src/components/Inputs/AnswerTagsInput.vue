@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       tag: '',
-      matchAmount: 0,
+      matchAmount: 100,
       internalTags: [],
     };
   },
@@ -87,7 +87,7 @@ export default {
       }
 
       this.tag = '';
-      this.matchAmount = 0;
+      this.matchAmount = 100;
 
       this.internalTags.push(addItem);
       this.$emit('input', this.internalTags);

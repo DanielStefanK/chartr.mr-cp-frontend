@@ -1,6 +1,6 @@
 <template>
   <div class="text-xs-center">
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog">
       <template slot="activator">
         <v-btn fab small color="primary">
           <v-icon dark>edit</v-icon>
@@ -10,13 +10,50 @@
       <v-card>
         <v-card-title class="headline grey lighten-2" primary-title>Edit Question</v-card-title>
 
-        <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</v-card-text>
+        <v-card-text>
+              <v-text-field
+                v-model="q.question"
+                name="question"
+                label="Question"
+              ></v-text-field>
+              <answer-tags-input v-model="q.answerTags"/>
+              <v-combobox
+                v-if="subQuestion"
+                v-model="q.matchTags"
+                label="Match tags"
+                chips
+                clearable
+                multiple
+              >
+                <template slot="selection" slot-scope="data">
+                  <v-chip
+                    :selected="data.selected"
+                    close
+                    @input="removeMatchTags(data.item)"
+                  >{{ data.item }}</v-chip>
+                </template>
+              </v-combobox>
+              <v-slider
+                v-model="q.distraction"
+                label="Distraction Level"
+                step="1"
+                max="10"
+                ticks
+              />
+              <v-text-field
+                clearable
+                v-model="q.time"
+                name="time"
+                label="Time in seconds"
+                type="number"
+              ></v-text-field>
+        </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click="dialog = false">Submit</v-btn>
+          <v-btn color="primary" flat @click="save">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -24,11 +61,56 @@
 </template>
 
 <script>
+import AnswerTagsInput from './Inputs/AnswerTagsInput';
+
 export default {
+  components: {
+    AnswerTagsInput,
+  },
+  props: {
+    question: {
+      type: Object,
+      required: true,
+    },
+    subQuestion: {
+      type: Boolean,
+      required: false,
+    },
+  },
   data() {
     return {
       dialog: false,
+      q: {
+        question: '',
+        answerTags: [],
+        matchTags: [],
+        distraction: 0,
+        time: null,
+        id: 1,
+      },
     };
+  },
+  created() {
+    this.q = JSON.parse(JSON.stringify(this.question));
+  },
+  watch: {
+    question: {
+      handler() {
+        this.q = JSON.parse(JSON.stringify(this.question));
+      },
+      deep: true,
+    },
+  },
+
+  methods: {
+    save() {
+      this.dialog = false;
+      this.$emit('save', this.q);
+    },
+    delete() {
+      this.dialog = false;
+      this.$emit('delete');
+    },
   },
 };
 </script>
