@@ -124,7 +124,7 @@ export default {
     replaceParams(q) {
       let string = q;
       Object.keys(this.params).forEach(item => {
-        string = string.replace('$' + item, this.params[item]);
+        string = string.replace(item, this.params[item]);
       });
       return string;
     },
