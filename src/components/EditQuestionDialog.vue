@@ -73,7 +73,7 @@ import AnswerTagsInput from './Inputs/AnswerTagsInput';
 const mustHaveLength = value => Array.isArray(value) && value.length > 0;
 
 const mustHaveLengthSub = (value, vm) =>
-  !vm.subQuestion ? Array.isArray(value) && value.length > 0 : true;
+  vm.subQuestion ? Array.isArray(value) && value.length > 0 : true;
 
 export default {
   components: {
