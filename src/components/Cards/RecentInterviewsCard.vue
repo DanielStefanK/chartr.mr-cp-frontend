@@ -12,7 +12,8 @@
       <template v-else-if="myInterviews? myInterviews.length > 0 : false">
         <tiny-interview-list :loading="$apollo.loading" :interviews="myInterviews"/>
       </template>
-      <template v-else>No interviews create one
+      <template v-else>
+        No interviews create one
         <router-link :to="{name: 'listinterviews'}">here</router-link>
       </template>
     </v-card-text>
@@ -46,6 +47,9 @@ export default {
       variables() {
         return {
           orderBy: 'createdAt_DESC',
+          where: {
+            deleted: false,
+          },
           first: 5,
           skip: 0,
         };
