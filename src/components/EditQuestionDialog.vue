@@ -110,7 +110,7 @@ export default {
       },
       set(newVal) {
         const num = Number.parseInt(newVal);
-        if (newVal && newVal !== '0' && num !== 0 && num !== NaN) {
+        if (newVal && newVal !== '0' && num !== 0 && !Number.isNaN(num)) {
           this.q.time = num;
         } else {
           this.q.time = null;
